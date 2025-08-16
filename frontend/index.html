@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portuguese Gap-Capture</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Portuguese Gap-Capture</h1>
+            <p>Record your speech and press spacebar to mark English segments</p>
+        </header>
+
+        <main>
+            <div class="recording-section">
+                <div class="status-indicator">
+                    <div class="status-dot" id="statusDot"></div>
+                    <span id="statusText">Ready to record</span>
+                </div>
+
+                <div class="controls">
+                    <button id="recordBtn" class="btn btn-primary">Start Recording</button>
+                    <button id="stopBtn" class="btn btn-secondary" disabled>Stop Recording</button>
+                </div>
+
+                <div class="recording-info">
+                    <div class="timer" id="timer">00:00</div>
+                    <div class="language-indicator" id="languageIndicator">
+                        <span class="lang-badge" id="currentLang">Portuguese</span>
+                    </div>
+                </div>
+
+                <div class="spans-display">
+                    <h3>English Segments</h3>
+                    <div id="spansList" class="spans-list">
+                        <p class="empty-state">Press spacebar to mark English segments</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="results-section" id="resultsSection" style="display: none;">
+                <h3>Processing Results</h3>
+                <div id="processingStatus">Processing your recording...</div>
+            </div>
+        </main>
+    </div>
+
+    <script src="/static/script.js"></script>
+</body>
+</html>
