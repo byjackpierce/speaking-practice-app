@@ -36,8 +36,18 @@ def split_audio_by_spans(audio_path: str, spans: List[Dict], total_duration: flo
     """
     Split audio into segments using librosa - includes all parts of the audio
     """
-    # Load audio file
-    y, sr = librosa.load(audio_path, sr=None)
+    # Load audio file with error handling
+    try:
+        y, sr = librosa.load(audio_path, sr=None)
+        if sr is None:
+            # Fallback to default sample rate
+            y, sr = librosa.load(audio_path, sr=22050)
+    except Exception as e:
+        logger.error(f"Failed to load audio file: {e}")
+        raise Exception(f"Audio file could not be loaded: {e}")
+    
+    if y is None or len(y) == 0:
+        raise Exception("Audio file is empty or corrupted")
     
     segments = []
     segment_index = 0
