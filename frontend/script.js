@@ -212,20 +212,28 @@ class AudioRecorder {
     }
 
     displayTranscriptionResults(result) {
-        let resultsHTML = '<h3>Transcription Results - Side by Side Comparison</h3>';
+        let resultsHTML = '<h3>Transcription Results</h3>';
         
-        // Approach 1: Current segmented approach
-        resultsHTML += '<div class="approach-section">';
-        resultsHTML += '<h4>🔧 Current Approach: Segmented Transcription</h4>';
+        // Check for error response
+        if (result.error) {
+            resultsHTML += `<div class="error-section">
+                <h4>❌ Error</h4>
+                <p>${result.error}</p>
+            </div>`;
+            this.processingStatus.innerHTML = resultsHTML;
+            return;
+        }
         
+        // Display individual segments
         if (result.transcriptions && result.transcriptions.length > 0) {
             resultsHTML += '<div class="transcription-segments">';
+            resultsHTML += '<h4>Individual Segments</h4>';
             result.transcriptions.forEach((segment, index) => {
                 resultsHTML += `
                     <div class="transcription-segment">
                         <div class="segment-header">
                             <span class="segment-time">${this.formatTime(segment.start_time)} - ${this.formatTime(segment.end_time)}</span>
-                            <span class="segment-language">${segment.language}</span>
+                            <span class="segment-language ${segment.language}">${segment.language}</span>
                         </div>
                         <p class="segment-text">${segment.text}</p>
                     </div>
@@ -234,66 +242,28 @@ class AudioRecorder {
             resultsHTML += '</div>';
         }
         
+        // Display full transcript
         if (result.full_transcript) {
             resultsHTML += `
                 <div class="full-transcript">
-                    <h5>Combined (Current):</h5>
+                    <h4>Complete Transcript</h4>
                     <p class="transcript-text">${result.full_transcript}</p>
                 </div>
             `;
         }
-        resultsHTML += '</div>';
         
-        // Approach 2: New combined approach
-        resultsHTML += '<div class="approach-section">';
-        resultsHTML += '<h4> New Approach: Full Context + Cross-Reference</h4>';
-        
-        if (result.combined_approach) {
+        // Add recording info
+        if (result.duration) {
             resultsHTML += `
-                <div class="full-transcript">
-                    <h5>Full Context Transcript:</h5>
-                    <p class="transcript-text">${this.highlightEnglishInText(result.combined_approach.full_transcript, result.combined_approach.english_segments)}</p>
+                <div class="recording-info-display">
+                    <h4>Recording Information</h4>
+                    <p><strong>Duration:</strong> ${this.formatTime(result.duration)}</p>
+                    <p><strong>English Segments:</strong> ${result.spans ? result.spans.length : 0}</p>
                 </div>
             `;
-            
-            if (result.combined_approach.english_segments && result.combined_approach.english_segments.length > 0) {
-                resultsHTML += '<div class="english-segments">';
-                resultsHTML += '<h5>Detected English Segments:</h5>';
-                result.combined_approach.english_segments.forEach((segment, index) => {
-                    resultsHTML += `
-                        <div class="english-segment">
-                            <span class="segment-time">${this.formatTime(segment.start_time)} - ${this.formatTime(segment.end_time)}</span>
-                            <span class="segment-text">${segment.text}</span>
-                        </div>
-                    `;
-                });
-                resultsHTML += '</div>';
-            }
-        } else {
-            resultsHTML += '<p class="no-data">Combined approach data not available</p>';
         }
-        resultsHTML += '</div>';
         
         this.processingStatus.innerHTML = resultsHTML;
-    }
-    
-    highlightEnglishInText(text, englishSegments) {
-        if (!englishSegments || englishSegments.length === 0) {
-            return text;
-        }
-        
-        let highlightedText = text;
-        
-        englishSegments.forEach(segment => {
-            const escapedText = segment.text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-            const regex = new RegExp(escapedText, 'g');
-            highlightedText = highlightedText.replace(
-                regex, 
-                `<span class="english-highlight">${segment.text}</span>`
-            );
-        });
-        
-        return highlightedText;
     }
 }
 
