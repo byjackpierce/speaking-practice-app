@@ -205,6 +205,7 @@ async def process_recording(
             "duration_seconds": duration_float,
             "segments_count": len(segments),
             "spans_count": len(spans_data),
+            "approach": "segmented",
             "timing": {
                 "total_time": transcription_complete - processing_start,
                 "audio_setup_time": audio_setup_complete - processing_start,
@@ -233,6 +234,76 @@ async def process_recording(
         if os.path.exists(temp_file_path):
             os.unlink(temp_file_path)
             logger.info("Cleaned up temporary audio file")
+
+@app.post("/process-recording-simple")
+async def process_recording_simple(
+    audio: UploadFile = File(...),
+    spans: str = Form(...),
+    duration: str = Form(...)
+):
+    try:
+            
+        processing_start_time = time.time()
+
+        spans_data = json.loads(spans)
+        duration_float = float(duration)
+
+        client = OpenAI()
+
+        with tempfile.NamedTemporaryFile(delete=False, suffix=".wav") as temp_file:
+            content = await audio.read()
+            temp_file.write(content)
+            temp_file_path = temp_file.name
+            logger.info(f"Saved audio to temporary file: {temp_file_path}")
+            logger.info("Processing entire file")
+
+
+            with open(temp_file.name, "rb") as audio_file:
+                transcript = client.audio.transcriptions.create(
+                    model="whisper-1",
+                    file=audio_file,
+                    language='pt',
+                    prompt="Transcribe this mixed Portuguese-English speech. Keep English words as English, transcribe Portuguese as Portuguese. Do not translate."
+                )
+
+            processing_end_time = time.time()
+
+            performance_metrics = {
+                "timestamp": datetime.now().isoformat(),
+                "duration_seconds": duration_float,
+                "approach": "simple_portuguese",
+                "spans_count": len(spans_data),
+                "timing": {
+                    "total_time": processing_end_time - processing_start_time,
+                    "audio_setup_time": 0,
+                    "transcription_time": processing_end_time - processing_start_time
+                }
+            }
+            
+
+            return {
+                "message": "success",
+                "duration": duration_float,
+                "spans": spans_data,
+                "transcriptions": None,
+                "full_transcript": transcript.text,
+                "performance_metrics": performance_metrics
+            }
+
+    except Exception as e:
+        logger.error(f"Transcription failed: {str(e)}")
+        return {
+            "error": f"Transcription failed: {str(e)}",
+            "duration": duration_float,
+            "spans": spans_data
+        }
+
+
+    finally:
+        if os.path.exists(temp_file_path):
+            os.unlink(temp_file_path)
+            logger.info("Cleaned up temporary audio file")
+
 
 @app.get("/")
 async def root():

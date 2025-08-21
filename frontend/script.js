@@ -173,7 +173,7 @@ class AudioRecorder {
 
     async processRecording() {
         this.resultsSection.style.display = 'block';
-        this.processingStatus.textContent = 'Processing your recording...';
+        this.processingStatus.textContent = 'Processing your recording with both approaches...';
 
         // Create audio blob
         const audioBlob = new Blob(this.audioChunks, { type: 'audio/wav' });
@@ -185,21 +185,32 @@ class AudioRecorder {
         formData.append('duration', this.getCurrentTime().toString());
 
         try {
-            // Send to backend API
-            const response = await fetch('/process-recording', {
-                method: 'POST',
-                body: formData
-            });
+            // Send to both backend APIs in parallel
+            const [segmentedResponse, simpleResponse] = await Promise.all([
+                fetch('/process-recording', {
+                    method: 'POST',
+                    body: formData
+                }),
+                fetch('/process-recording-simple', {
+                    method: 'POST',
+                    body: formData
+                })
+            ]);
 
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+            if (!segmentedResponse.ok) {
+                throw new Error(`Segmented API error! status: ${segmentedResponse.status}`);
+            }
+            if (!simpleResponse.ok) {
+                throw new Error(`Simple API error! status: ${simpleResponse.status}`);
             }
 
-            const result = await response.json();
+            const segmentedResult = await segmentedResponse.json();
+            const simpleResult = await simpleResponse.json();
             
-            // Display the transcription results
-            this.displayTranscriptionResults(result);
-            console.log('Backend response:', result);
+            // Display both results
+            this.displayComparisonResults(segmentedResult, simpleResult);
+            console.log('Segmented response:', segmentedResult);
+            console.log('Simple response:', simpleResult);
             
         } catch (error) {
             console.error('Error processing recording:', error);
@@ -207,33 +218,61 @@ class AudioRecorder {
         }
     }
 
-    displayTranscriptionResults(result) {
+    displayComparisonResults(segmentedResult, simpleResult) {
         let resultsHTML = '';
         
-        // Check for error response
-        if (result.error) {
+        // Check for errors
+        if (segmentedResult.error || simpleResult.error) {
             resultsHTML += `<div class="error-section">
                 <h4>❌ Error</h4>
-                <p>${result.error}</p>
+                <p>Segmented: ${segmentedResult.error || 'Success'}</p>
+                <p>Simple: ${simpleResult.error || 'Success'}</p>
             </div>`;
             this.processingStatus.innerHTML = resultsHTML;
             return;
         }
         
-        // Display complete transcript with highlighted English segments
-        if (result.full_transcript) {
-            let highlightedTranscript = result.full_transcript;
+        // Performance comparison
+        const segmentedTime = segmentedResult.performance_metrics?.timing?.total_time || 0;
+        const simpleTime = simpleResult.performance_metrics?.timing?.total_time || 0;
+        const timeDifference = segmentedTime - simpleTime;
+        const fasterApproach = timeDifference > 0 ? 'Simple' : 'Segmented';
+        
+        resultsHTML += `
+            <div class="comparison-header">
+                <h2>🔄 Transcription Comparison</h2>
+                <div class="performance-summary">
+                    <div class="performance-item">
+                        <span class="approach-label">Segmented:</span>
+                        <span class="time-value">${segmentedTime.toFixed(2)}s</span>
+                    </div>
+                    <div class="performance-item">
+                        <span class="approach-label">Simple:</span>
+                        <span class="time-value">${simpleTime.toFixed(2)}s</span>
+                    </div>
+                    <div class="performance-item ${timeDifference > 0 ? 'faster' : 'slower'}">
+                        <span class="approach-label">Difference:</span>
+                        <span class="time-value">${Math.abs(timeDifference).toFixed(2)}s ${fasterApproach} is faster</span>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        // Segmented Approach Results
+        resultsHTML += `
+            <div class="approach-section segmented">
+                <h3>🎯 Segmented Approach</h3>
+                <p class="approach-description">Processes each segment separately with language detection</p>
+        `;
+        
+        if (segmentedResult.full_transcript) {
+            let highlightedTranscript = segmentedResult.full_transcript;
             
-            // Highlight English segments if we have transcription data
-            if (result.transcriptions && result.transcriptions.length > 0) {
-                // Find English segments and highlight them with translations
-                result.transcriptions.forEach((segment) => {
+            if (segmentedResult.transcriptions && segmentedResult.transcriptions.length > 0) {
+                segmentedResult.transcriptions.forEach((segment) => {
                     if (segment.language === 'english' && segment.text) {
-                        // Escape special regex characters in the text
                         const escapedText = segment.text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
                         const regex = new RegExp(escapedText, 'g');
-                        
-                        // Create hover tooltip with translation
                         const translation = segment.translation || 'Translation not available';
                         const tooltipText = `English: ${segment.text}<br>Portuguese: ${translation}`;
                         
@@ -247,28 +286,24 @@ class AudioRecorder {
             
             resultsHTML += `
                 <div class="transcript-container">
-                    <h3>Complete Transcript</h3>
+                    <h4>Complete Transcript</h4>
                     <div class="transcript-text">${highlightedTranscript}</div>
                 </div>
             `;
         }
         
-        // Display translations list
-        if (result.transcriptions && result.transcriptions.length > 0) {
-            const englishSegments = result.transcriptions.filter(segment => segment.language === 'english');
-            
-            console.log('English segments found:', englishSegments);
-            
+        // Segmented translations
+        if (segmentedResult.transcriptions && segmentedResult.transcriptions.length > 0) {
+            const englishSegments = segmentedResult.transcriptions.filter(segment => segment.language === 'english');
             if (englishSegments.length > 0) {
                 resultsHTML += `
                     <div class="translations-container">
-                        <h3>🔤 English Phrases & Translations</h3>
+                        <h4>🔤 English Phrases & Translations</h4>
                         <div class="translations-list">
                 `;
                 
-                englishSegments.forEach((segment, index) => {
+                englishSegments.forEach((segment) => {
                     const translation = segment.translation || 'Translation not available';
-                    console.log(`Translation ${index}: "${segment.text}" → "${translation}"`);
                     resultsHTML += `
                         <div class="translation-item">
                             <div class="translation-english">
@@ -286,26 +321,28 @@ class AudioRecorder {
                         </div>
                     </div>
                 `;
-            } else {
-                resultsHTML += `
-                    <div class="translations-container">
-                        <h3>🔤 English Phrases & Translations</h3>
-                        <p style="text-align: center; color: #666; font-style: italic;">
-                            No English segments detected in this recording.
-                        </p>
-                    </div>
-                `;
             }
-        } else {
+        }
+        
+        resultsHTML += `</div>`;
+        
+        // Simple Approach Results
+        resultsHTML += `
+            <div class="approach-section simple">
+                <h3>⚡ Simple Approach</h3>
+                <p class="approach-description">Processes entire audio as Portuguese for better grammar flow</p>
+        `;
+        
+        if (simpleResult.full_transcript) {
             resultsHTML += `
-                <div class="translations-container">
-                    <h3>🔤 English Phrases & Translations</h3>
-                    <p style="text-align: center; color: #666; font-style: italic;">
-                        No transcription data available.
-                    </p>
+                <div class="transcript-container">
+                    <h4>Complete Transcript</h4>
+                    <div class="transcript-text">${simpleResult.full_transcript}</div>
                 </div>
             `;
         }
+        
+        resultsHTML += `</div>`;
         
         this.processingStatus.innerHTML = resultsHTML;
     }

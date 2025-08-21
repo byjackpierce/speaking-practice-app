@@ -330,6 +330,90 @@ header p {
     text-align: center;
 }
 
+/* Comparison Styles */
+.comparison-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 2rem;
+    border-radius: 16px;
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.comparison-header h2 {
+    margin: 0 0 1.5rem 0;
+    font-size: 2rem;
+}
+
+.performance-summary {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.performance-item {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 1rem;
+    border-radius: 8px;
+    min-width: 150px;
+}
+
+.approach-label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.time-value {
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.performance-item.faster {
+    background: rgba(40, 167, 69, 0.2);
+    border: 2px solid #28a745;
+}
+
+.performance-item.slower {
+    background: rgba(220, 53, 69, 0.2);
+    border: 2px solid #dc3545;
+}
+
+.approach-section {
+    background: white;
+    border-radius: 16px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.approach-section.segmented {
+    border-left: 5px solid #667eea;
+}
+
+.approach-section.simple {
+    border-left: 5px solid #28a745;
+}
+
+.approach-section h3 {
+    color: #333;
+    margin-bottom: 0.5rem;
+    font-size: 1.5rem;
+}
+
+.approach-description {
+    color: #666;
+    font-style: italic;
+    margin-bottom: 1.5rem;
+}
+
+.approach-section h4 {
+    color: #667eea;
+    margin: 1.5rem 0 1rem 0;
+    font-size: 1.2rem;
+}
+
 .translations-list {
     display: flex;
     flex-direction: column;
