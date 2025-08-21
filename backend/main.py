@@ -11,6 +11,8 @@ from typing import List, Dict
 import librosa
 import soundfile as sf
 from dotenv import load_dotenv
+import time
+from datetime import datetime
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -117,6 +119,7 @@ async def process_recording(
     spans: str = Form(...),
     duration: str = Form(...)
 ):
+    processing_start = time.time()
     logger.info(f"Processing recording: {audio.filename}, duration: {duration}s")
     
     spans_data = json.loads(spans)
@@ -151,6 +154,7 @@ async def process_recording(
         logger.info(f"Created {len(segments)} audio segments")
         transcriptions = []
         
+        audio_setup_complete = time.time()
         for segment in segments:
             logger.info(f"Transcribing segment {segment['index']} ({segment['language']})")
             # Save segment to temporary file using soundfile
@@ -179,13 +183,28 @@ async def process_recording(
 
         full_transcript = " ".join([t['text'] for t in transcriptions])
         logger.info(f"Processing completed successfully. Full transcript: {full_transcript[:100]}...")
+        
+        transcription_complete = time.time()
+
+        performance_metrics = {
+            "timestamp": datetime.now().isoformat(),
+            "duration_seconds": duration_float,
+            "segments_count": len(segments),
+            "spans_count": len(spans_data),
+            "timing": {
+                "total_time": transcription_complete - processing_start,
+                "audio_setup_time": audio_setup_complete - processing_start,
+                "transcription_time": transcription_complete - audio_setup_complete
+            }
+        }
 
         return {
             "message": "success",
             "duration": duration_float,
             "spans": spans_data,
             "transcriptions": transcriptions,
-            "full_transcript": full_transcript
+            "full_transcript": full_transcript,
+            "performance_metrics": performance_metrics
         }
 
     except Exception as e:
