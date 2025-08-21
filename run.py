@@ -9,7 +9,7 @@ class DevelopmentServer:
         self.reload = True
     
     def start(self):
-        print("🚀 Starting development server...")
+        print("Starting development server...")
         os.chdir('backend')
         subprocess.run([
             'python3', '-m', 'uvicorn', 
@@ -26,7 +26,7 @@ class ProductionServer:
         self.reload = False
     
     def start(self):
-        print("🏭 Starting production server...")
+        print("Starting production server...")
         os.chdir('backend')
         subprocess.run([
             'python3', '-m', 'uvicorn', 

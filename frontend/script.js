@@ -226,15 +226,20 @@ class AudioRecorder {
             
             // Highlight English segments if we have transcription data
             if (result.transcriptions && result.transcriptions.length > 0) {
-                // Find English segments and highlight them
+                // Find English segments and highlight them with translations
                 result.transcriptions.forEach((segment) => {
                     if (segment.language === 'english' && segment.text) {
                         // Escape special regex characters in the text
                         const escapedText = segment.text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
                         const regex = new RegExp(escapedText, 'g');
+                        
+                        // Create hover tooltip with translation
+                        const translation = segment.translation || 'Translation not available';
+                        const tooltipText = `English: ${segment.text}<br>Portuguese: ${translation}`;
+                        
                         highlightedTranscript = highlightedTranscript.replace(
                             regex,
-                            `<span class="english-highlight" title="English segment">${segment.text}</span>`
+                            `<span class="english-highlight" title="${tooltipText}">${segment.text}</span>`
                         );
                     }
                 });
@@ -244,6 +249,60 @@ class AudioRecorder {
                 <div class="transcript-container">
                     <h3>Complete Transcript</h3>
                     <div class="transcript-text">${highlightedTranscript}</div>
+                </div>
+            `;
+        }
+        
+        // Display translations list
+        if (result.transcriptions && result.transcriptions.length > 0) {
+            const englishSegments = result.transcriptions.filter(segment => segment.language === 'english');
+            
+            console.log('English segments found:', englishSegments);
+            
+            if (englishSegments.length > 0) {
+                resultsHTML += `
+                    <div class="translations-container">
+                        <h3>🔤 English Phrases & Translations</h3>
+                        <div class="translations-list">
+                `;
+                
+                englishSegments.forEach((segment, index) => {
+                    const translation = segment.translation || 'Translation not available';
+                    console.log(`Translation ${index}: "${segment.text}" → "${translation}"`);
+                    resultsHTML += `
+                        <div class="translation-item">
+                            <div class="translation-english">
+                                <strong>English:</strong> ${segment.text}
+                            </div>
+                            <div class="translation-arrow">→</div>
+                            <div class="translation-portuguese">
+                                <strong>Portuguese:</strong> ${translation}
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                resultsHTML += `
+                        </div>
+                    </div>
+                `;
+            } else {
+                resultsHTML += `
+                    <div class="translations-container">
+                        <h3>🔤 English Phrases & Translations</h3>
+                        <p style="text-align: center; color: #666; font-style: italic;">
+                            No English segments detected in this recording.
+                        </p>
+                    </div>
+                `;
+            }
+        } else {
+            resultsHTML += `
+                <div class="translations-container">
+                    <h3>🔤 English Phrases & Translations</h3>
+                    <p style="text-align: center; color: #666; font-style: italic;">
+                        No transcription data available.
+                    </p>
                 </div>
             `;
         }

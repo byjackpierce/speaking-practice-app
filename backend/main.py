@@ -155,6 +155,7 @@ async def process_recording(
         transcriptions = []
         
         audio_setup_complete = time.time()
+
         for segment in segments:
             logger.info(f"Transcribing segment {segment['index']} ({segment['language']})")
             # Save segment to temporary file using soundfile
@@ -169,11 +170,24 @@ async def process_recording(
                         file=audio_file,
                         language=language_code
                     )
+
+                if segment['language'] == 'english':
+                    translation_response = client.chat.completions.create(
+                        model="gpt-5",
+                        messages=[
+                            {"role": "system", "content": "You are a helpful Portuguese translator. Translate the given English text to natural Portuguese."},
+                            {"role": "user", "content": f"Translate this to Portuguese: {transcript.text}"}
+                        ]
+                    )
+                    translation = translation_response.choices[0].message.content.strip()
+                else:
+                    translation = None
                 
                 transcriptions.append({
                     'segment_index': segment['index'],
                     'language': segment['language'],
                     'text': transcript.text,
+                    'translation': translation,
                     'start_time': segment['start_time'],
                     'end_time': segment['end_time']
                 })

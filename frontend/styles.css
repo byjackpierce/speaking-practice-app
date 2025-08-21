@@ -314,6 +314,63 @@ header p {
     z-index: 1000;
 }
 
+.translations-container {
+    background: linear-gradient(135deg, #f8f9ff 0%, #f0f2ff 100%);
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15);
+    margin-top: 2rem;
+    border: 2px solid #667eea;
+}
+
+.translations-container h3 {
+    color: #667eea;
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+    text-align: center;
+}
+
+.translations-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.translation-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.5rem;
+    background: white;
+    border-radius: 10px;
+    border-left: 5px solid #667eea;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+}
+
+.translation-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.2);
+}
+
+.translation-english {
+    font-weight: 600;
+    color: #495057;
+    flex: 1;
+}
+
+.translation-arrow {
+    color: #667eea;
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+.translation-portuguese {
+    font-weight: 500;
+    color: #28a745;
+    flex: 1;
+}
+
 
 
 
