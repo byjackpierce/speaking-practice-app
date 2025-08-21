@@ -19,7 +19,6 @@ class AudioRecorder {
         this.statusText = document.getElementById('statusText');
         this.timer = document.getElementById('timer');
         this.currentLang = document.getElementById('currentLang');
-        this.spansList = document.getElementById('spansList');
         this.resultsSection = document.getElementById('resultsSection');
         this.processingStatus = document.getElementById('processingStatus');
     }
@@ -102,7 +101,6 @@ class AudioRecorder {
         }
         
         this.updateUI();
-        this.updateSpansDisplay();
     }
 
     getCurrentTime() {
@@ -134,45 +132,43 @@ class AudioRecorder {
         this.recordBtn.disabled = this.isRecording;
         this.stopBtn.disabled = !this.isRecording;
 
-        // Update status
+        // Update status with dramatic visual changes for English mode
         if (this.isRecording) {
-            this.statusDot.className = 'status-dot recording';
-            this.statusText.textContent = this.isEnglishMode ? 'Recording (English Mode)' : 'Recording (Portuguese)';
+            if (this.isEnglishMode) {
+                // Dramatic English mode styling
+                this.statusDot.className = 'status-dot english-recording';
+                this.statusText.textContent = 'RECORDING ENGLISH';
+                this.statusText.className = 'status-text english-mode';
+                this.currentLang.textContent = 'ENGLISH';
+                this.currentLang.className = 'lang-badge english-mode';
+                
+                // Add English mode visual effects to the entire recording section
+                document.querySelector('.recording-section').classList.add('english-mode-active');
+                document.querySelector('.timer').classList.add('english-mode');
+            } else {
+                // Normal Portuguese mode
+                this.statusDot.className = 'status-dot recording';
+                this.statusText.textContent = 'Recording Portuguese';
+                this.statusText.className = 'status-text';
+                this.currentLang.textContent = 'Portuguese';
+                this.currentLang.className = 'lang-badge';
+                
+                // Remove English mode effects
+                document.querySelector('.recording-section').classList.remove('english-mode-active');
+                document.querySelector('.timer').classList.remove('english-mode');
+            }
         } else {
+            // Not recording
             this.statusDot.className = 'status-dot';
             this.statusText.textContent = 'Ready to record';
+            this.statusText.className = 'status-text';
+            this.currentLang.textContent = 'Portuguese';
+            this.currentLang.className = 'lang-badge';
+            
+            // Remove English mode effects
+            document.querySelector('.recording-section').classList.remove('english-mode-active');
+            document.querySelector('.timer').classList.remove('english-mode');
         }
-
-        // Update language indicator
-        this.currentLang.textContent = this.isEnglishMode ? 'English' : 'Portuguese';
-        this.currentLang.className = `lang-badge ${this.isEnglishMode ? 'english' : ''}`;
-    }
-
-    updateSpansDisplay() {
-        if (this.spans.length === 0) {
-            this.spansList.innerHTML = '<p class="empty-state">Press spacebar to mark English segments</p>';
-            return;
-        }
-
-        this.spansList.innerHTML = '';
-        
-        this.spans.forEach((span, index) => {
-            const spanElement = document.createElement('div');
-            spanElement.className = 'span-item';
-            
-            const startTime = this.formatTime(span.start);
-            const endTime = span.end ? this.formatTime(span.end) : '...';
-            const duration = span.end ? this.formatTime(span.end - span.start) : '';
-            
-            spanElement.innerHTML = `
-                <div>
-                    <div class="span-time">${startTime} - ${endTime}</div>
-                    <div class="span-duration">${duration}</div>
-                </div>
-            `;
-            
-            this.spansList.appendChild(spanElement);
-        });
     }
 
     async processRecording() {
@@ -212,7 +208,7 @@ class AudioRecorder {
     }
 
     displayTranscriptionResults(result) {
-        let resultsHTML = '<h3>Transcription Results</h3>';
+        let resultsHTML = '';
         
         // Check for error response
         if (result.error) {
@@ -224,41 +220,30 @@ class AudioRecorder {
             return;
         }
         
-        // Display individual segments
-        if (result.transcriptions && result.transcriptions.length > 0) {
-            resultsHTML += '<div class="transcription-segments">';
-            resultsHTML += '<h4>Individual Segments</h4>';
-            result.transcriptions.forEach((segment, index) => {
-                resultsHTML += `
-                    <div class="transcription-segment">
-                        <div class="segment-header">
-                            <span class="segment-time">${this.formatTime(segment.start_time)} - ${this.formatTime(segment.end_time)}</span>
-                            <span class="segment-language ${segment.language}">${segment.language}</span>
-                        </div>
-                        <p class="segment-text">${segment.text}</p>
-                    </div>
-                `;
-            });
-            resultsHTML += '</div>';
-        }
-        
-        // Display full transcript
+        // Display complete transcript with highlighted English segments
         if (result.full_transcript) {
+            let highlightedTranscript = result.full_transcript;
+            
+            // Highlight English segments if we have transcription data
+            if (result.transcriptions && result.transcriptions.length > 0) {
+                // Find English segments and highlight them
+                result.transcriptions.forEach((segment) => {
+                    if (segment.language === 'english' && segment.text) {
+                        // Escape special regex characters in the text
+                        const escapedText = segment.text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                        const regex = new RegExp(escapedText, 'g');
+                        highlightedTranscript = highlightedTranscript.replace(
+                            regex,
+                            `<span class="english-highlight" title="English segment">${segment.text}</span>`
+                        );
+                    }
+                });
+            }
+            
             resultsHTML += `
-                <div class="full-transcript">
-                    <h4>Complete Transcript</h4>
-                    <p class="transcript-text">${result.full_transcript}</p>
-                </div>
-            `;
-        }
-        
-        // Add recording info
-        if (result.duration) {
-            resultsHTML += `
-                <div class="recording-info-display">
-                    <h4>Recording Information</h4>
-                    <p><strong>Duration:</strong> ${this.formatTime(result.duration)}</p>
-                    <p><strong>English Segments:</strong> ${result.spans ? result.spans.length : 0}</p>
+                <div class="transcript-container">
+                    <h3>Complete Transcript</h3>
+                    <div class="transcript-text">${highlightedTranscript}</div>
                 </div>
             `;
         }
