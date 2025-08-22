@@ -1,117 +1,45 @@
 from fastapi import FastAPI, UploadFile, File, Form
-from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 import json
 import os
 import tempfile
-import logging
-from openai import OpenAI
-from typing import List, Dict
-import librosa
-import soundfile as sf
-from dotenv import load_dotenv
 import time
-from datetime import datetime
+import librosa
+from openai import OpenAI
 
-# Configure logging
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
+"""
+Portuguese Gap-Capture API
+==========================
 
-# Load environment variables from .env file
-load_dotenv()
+FastAPI application for processing mixed Portuguese-English audio recordings.
+Provides both segmented and simple transcription approaches with performance comparison.
 
-app = FastAPI(title="Portuguese Gap-Capture API", version="1.0.0")
+Endpoints:
+- POST /process-recording: Segmented transcription with language detection
+- POST /process-recording-simple: Simple Portuguese transcription
+- GET /: Frontend interface
+- GET /api/health: Health check
+"""
+
+# Import our modular components
+from config.settings import settings
+from config.logging import logger
+from middleware.cors import setup_cors
+from services.audio_service import split_audio_by_spans, save_audio_segment, cleanup_temp_file
+from services.transcription_service import transcribe_segment, transcribe_simple
+from utils.performance import create_performance_metrics
+
+# Create FastAPI app
+app = FastAPI(title=settings.APP_TITLE, version=settings.APP_VERSION)
 
 # Mount static files for frontend
-app.mount("/static", StaticFiles(directory="../frontend"), name="static")
+app.mount("/static", StaticFiles(directory=settings.STATIC_FILES_DIR), name="static")
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["http://localhost:8000", "http://localhost:3000", "http://localhost:8080", "http://127.0.0.1:3000", "http://127.0.0.1:8080"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"]
-)
+# Setup CORS middleware
+setup_cors(app)
 
-def split_audio_by_spans(audio_path: str, spans: List[Dict], total_duration: float) -> List[Dict]:
-    """
-    Split audio into segments using librosa - includes all parts of the audio
-    """
-    # Load audio file with error handling
-    try:
-        y, sr = librosa.load(audio_path, sr=None)
-        if sr is None:
-            # Fallback to default sample rate
-            y, sr = librosa.load(audio_path, sr=22050)
-    except Exception as e:
-        logger.error(f"Failed to load audio file: {e}")
-        raise Exception(f"Audio file could not be loaded: {e}")
-    
-    if y is None or len(y) == 0:
-        raise Exception("Audio file is empty or corrupted")
-    
-    segments = []
-    segment_index = 0
-    
-    # Sort spans by start time
-    sorted_spans = sorted(spans, key=lambda x: x.get('start', 0))
-    
-    current_time = 0
-    
-    for i, span in enumerate(sorted_spans):
-        span_start = span.get('start', 0)
-        span_end = span.get('end', total_duration)
-        
-        # Add Portuguese segment before this span (if there's a gap)
-        if span_start > current_time:
-            portuguese_start_sample = int(current_time * sr)
-            portuguese_end_sample = int(span_start * sr)
-            portuguese_audio = y[portuguese_start_sample:portuguese_end_sample]
-            
-            segments.append({
-                'index': segment_index,
-                'start_time': current_time,
-                'end_time': span_start,
-                'language': 'portuguese',
-                'audio_data': portuguese_audio,
-                'sample_rate': sr
-            })
-            segment_index += 1
-        
-        # Add the English span
-        english_start_sample = int(span_start * sr)
-        english_end_sample = int(span_end * sr)
-        english_audio = y[english_start_sample:english_end_sample]
-        
-        segments.append({
-            'index': segment_index,
-            'start_time': span_start,
-            'end_time': span_end,
-            'language': 'english',
-            'audio_data': english_audio,
-            'sample_rate': sr
-        })
-        segment_index += 1
-        
-        current_time = span_end
-    
-    # Add final Portuguese segment if there's remaining audio
-    if current_time < total_duration:
-        final_start_sample = int(current_time * sr)
-        final_end_sample = int(total_duration * sr)
-        final_audio = y[final_start_sample:final_end_sample]
-        
-        segments.append({
-            'index': segment_index,
-            'start_time': current_time,
-            'end_time': total_duration,
-            'language': 'portuguese',
-            'audio_data': final_audio,
-            'sample_rate': sr
-        })
-    
-    return segments
+
 
 @app.post("/process-recording")
 async def process_recording(
@@ -119,6 +47,20 @@ async def process_recording(
     spans: str = Form(...),
     duration: str = Form(...)
 ):
+    """
+    Process audio recording using segmented approach.
+    
+    Splits audio into Portuguese and English segments based on user-provided spans,
+    transcribes each segment separately, and provides translations for English parts.
+    
+    Args:
+        audio: Audio file upload
+        spans: JSON string of language span timestamps
+        duration: Recording duration in seconds
+        
+    Returns:
+        Dict containing transcriptions, translations, and performance metrics
+    """
     processing_start = time.time()
     logger.info(f"Processing recording: {audio.filename}, duration: {duration}s")
     
@@ -158,60 +100,25 @@ async def process_recording(
 
         for segment in segments:
             logger.info(f"Transcribing segment {segment['index']} ({segment['language']})")
-            # Save segment to temporary file using soundfile
-            with tempfile.NamedTemporaryFile(delete=False, suffix=".wav") as segment_file:
-                sf.write(segment_file.name, segment['audio_data'], segment['sample_rate'])
-                
-                language_code = "pt" if segment['language'] == 'portuguese' else "en"
-
-                with open(segment_file.name, "rb") as audio_file:
-                    transcript = client.audio.transcriptions.create(
-                        model="whisper-1",
-                        file=audio_file,
-                        language=language_code
-                    )
-
-                if segment['language'] == 'english':
-                    translation_response = client.chat.completions.create(
-                        model="gpt-5",
-                        messages=[
-                            {"role": "system", "content": "You are a helpful Portuguese translator. Translate the given English text to natural Portuguese."},
-                            {"role": "user", "content": f"Translate this to Portuguese: {transcript.text}"}
-                        ]
-                    )
-                    translation = translation_response.choices[0].message.content.strip()
-                else:
-                    translation = None
-                
-                transcriptions.append({
-                    'segment_index': segment['index'],
-                    'language': segment['language'],
-                    'text': transcript.text,
-                    'translation': translation,
-                    'start_time': segment['start_time'],
-                    'end_time': segment['end_time']
-                })
-                
-                logger.info(f"Segment {segment['index']} transcribed: '{transcript.text[:50]}...'")
-                os.unlink(segment_file.name)
+            # Save segment to temporary file
+            segment['temp_file_path'] = save_audio_segment(segment)
+            
+            # Transcribe segment
+            transcription_result = transcribe_segment(segment, client)
+            transcriptions.append(transcription_result)
+            
+            # Clean up segment file
+            cleanup_temp_file(segment['temp_file_path'])
 
         full_transcript = " ".join([t['text'] for t in transcriptions])
         logger.info(f"Processing completed successfully. Full transcript: {full_transcript[:100]}...")
         
         transcription_complete = time.time()
 
-        performance_metrics = {
-            "timestamp": datetime.now().isoformat(),
-            "duration_seconds": duration_float,
-            "segments_count": len(segments),
-            "spans_count": len(spans_data),
-            "approach": "segmented",
-            "timing": {
-                "total_time": transcription_complete - processing_start,
-                "audio_setup_time": audio_setup_complete - processing_start,
-                "transcription_time": transcription_complete - audio_setup_complete
-            }
-        }
+        performance_metrics = create_performance_metrics(
+            duration_float, len(segments), len(spans_data), "segmented",
+            processing_start, audio_setup_complete, transcription_complete
+        )
 
         return {
             "message": "success",
@@ -241,6 +148,20 @@ async def process_recording_simple(
     spans: str = Form(...),
     duration: str = Form(...)
 ):
+    """
+    Process audio recording using simple approach.
+    
+    Transcribes entire audio as Portuguese for better grammar flow.
+    Faster than segmented approach but may translate English words.
+    
+    Args:
+        audio: Audio file upload
+        spans: JSON string of language span timestamps (not used in simple approach)
+        duration: Recording duration in seconds
+        
+    Returns:
+        Dict containing full transcript and performance metrics
+    """
     try:
             
         processing_start_time = time.time()
@@ -258,35 +179,22 @@ async def process_recording_simple(
             logger.info("Processing entire file")
 
 
-            with open(temp_file.name, "rb") as audio_file:
-                transcript = client.audio.transcriptions.create(
-                    model="whisper-1",
-                    file=audio_file,
-                    language='pt',
-                    prompt="Transcribe this mixed Portuguese-English speech. Keep English words as English, transcribe Portuguese as Portuguese. Do not translate."
-                )
+            # Use the transcription service
+            transcript_text = transcribe_simple(temp_file_path, client)
 
             processing_end_time = time.time()
 
-            performance_metrics = {
-                "timestamp": datetime.now().isoformat(),
-                "duration_seconds": duration_float,
-                "approach": "simple_portuguese",
-                "spans_count": len(spans_data),
-                "timing": {
-                    "total_time": processing_end_time - processing_start_time,
-                    "audio_setup_time": 0,
-                    "transcription_time": processing_end_time - processing_start_time
-                }
-            }
-            
+            performance_metrics = create_performance_metrics(
+                duration_float, 1, len(spans_data), "simple_portuguese",
+                processing_start_time, processing_start_time, processing_end_time
+            )
 
             return {
                 "message": "success",
                 "duration": duration_float,
                 "spans": spans_data,
                 "transcriptions": None,
-                "full_transcript": transcript.text,
+                "full_transcript": transcript_text,
                 "performance_metrics": performance_metrics
             }
 
