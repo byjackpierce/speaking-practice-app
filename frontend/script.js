@@ -47,6 +47,13 @@ class AudioRecorder {
             this.isRecording = true;
             this.isEnglishMode = false;
 
+            // Start with Portuguese span
+            this.spans.push({
+                start: 0,
+                end: null,
+                language: 'portuguese'
+            });
+
             this.mediaRecorder.ondataavailable = (event) => {
                 this.audioChunks.push(event.data);
             };
@@ -72,12 +79,31 @@ class AudioRecorder {
             this.isRecording = false;
             this.isEnglishMode = false;
             this.stopTimer();
+            
+            // Finalize the last span
+            const finalTime = this.getCurrentTime();
+            if (this.spans.length > 0) {
+                this.spans[this.spans.length - 1].end = finalTime;
+            }
+            
             this.updateUI();
             
             // Stop all tracks
             this.mediaRecorder.stream.getTracks().forEach(track => track.stop());
             
             console.log('Recording stopped');
+            console.log('Final spans:', this.spans);
+            
+            // Validate spans coverage
+            const totalDuration = this.getCurrentTime();
+            let totalCovered = 0;
+            this.spans.forEach((span, index) => {
+                const spanDuration = span.end - span.start;
+                totalCovered += spanDuration;
+                console.log(`Span ${index}: ${span.language} from ${span.start.toFixed(2)}s to ${span.end.toFixed(2)}s (${spanDuration.toFixed(2)}s)`);
+            });
+            console.log(`Total duration: ${totalDuration.toFixed(2)}s, Total covered: ${totalCovered.toFixed(2)}s`);
+            console.log(`Coverage: ${((totalCovered / totalDuration) * 100).toFixed(1)}%`);
         }
     }
 
@@ -87,6 +113,13 @@ class AudioRecorder {
         if (!this.isEnglishMode) {
             // Starting English mode
             this.isEnglishMode = true;
+            
+            // End the current Portuguese span
+            if (this.spans.length > 0) {
+                this.spans[this.spans.length - 1].end = currentTime;
+            }
+            
+            // Start new English span
             this.spans.push({
                 start: currentTime,
                 end: null,
@@ -95,9 +128,18 @@ class AudioRecorder {
         } else {
             // Ending English mode
             this.isEnglishMode = false;
+            
+            // End the current English span
             if (this.spans.length > 0) {
                 this.spans[this.spans.length - 1].end = currentTime;
             }
+            
+            // Start new Portuguese span
+            this.spans.push({
+                start: currentTime,
+                end: null,
+                language: 'portuguese'
+            });
         }
         
         this.updateUI();
@@ -186,31 +228,31 @@ class AudioRecorder {
 
         try {
             // Send to both backend APIs in parallel
-            const [segmentedResponse, simpleResponse] = await Promise.all([
-                fetch('/process-recording', {
+            const [autoDetectResponse, segmentedResponse] = await Promise.all([
+                fetch('/process-recording-auto-detect', {
                     method: 'POST',
                     body: formData
                 }),
-                fetch('/process-recording-simple', {
+                fetch('/process-recording-segmented-parallel', {
                     method: 'POST',
                     body: formData
                 })
             ]);
 
-            if (!segmentedResponse.ok) {
-                throw new Error(`Segmented API error! status: ${segmentedResponse.status}`);
+            if (!autoDetectResponse.ok) {
+                throw new Error(`Auto-detect API error! status: ${autoDetectResponse.status}`);
             }
-            if (!simpleResponse.ok) {
-                throw new Error(`Simple API error! status: ${simpleResponse.status}`);
+            if (!segmentedResponse.ok) {
+                throw new Error(`Segmented-parallel API error! status: ${segmentedResponse.status}`);
             }
 
+            const autoDetectResult = await autoDetectResponse.json();
             const segmentedResult = await segmentedResponse.json();
-            const simpleResult = await simpleResponse.json();
             
-            // Display both results
-            this.displayComparisonResults(segmentedResult, simpleResult);
-            console.log('Segmented response:', segmentedResult);
-            console.log('Simple response:', simpleResult);
+            // Display comparison results
+            this.displayComparisonResults(autoDetectResult, segmentedResult);
+            console.log('Auto-detect response:', autoDetectResult);
+            console.log('Segmented-parallel response:', segmentedResult);
             
         } catch (error) {
             console.error('Error processing recording:', error);
@@ -218,128 +260,99 @@ class AudioRecorder {
         }
     }
 
-    displayComparisonResults(segmentedResult, simpleResult) {
+    displayComparisonResults(autoDetectResult, segmentedResult) {
         let resultsHTML = '';
         
         // Check for errors
-        if (segmentedResult.error || simpleResult.error) {
+        if (autoDetectResult.error || segmentedResult.error) {
             resultsHTML += `<div class="error-section">
                 <h4>❌ Error</h4>
-                <p>Segmented: ${segmentedResult.error || 'Success'}</p>
-                <p>Simple: ${simpleResult.error || 'Success'}</p>
+                <p>Auto-detect: ${autoDetectResult.error || 'Success'}</p>
+                <p>Segmented-parallel: ${segmentedResult.error || 'Success'}</p>
             </div>`;
             this.processingStatus.innerHTML = resultsHTML;
             return;
         }
         
         // Performance comparison
-        const segmentedTime = segmentedResult.performance_metrics?.timing?.total_time || 0;
-        const simpleTime = simpleResult.performance_metrics?.timing?.total_time || 0;
-        const timeDifference = segmentedTime - simpleTime;
-        const fasterApproach = timeDifference > 0 ? 'Simple' : 'Segmented';
+        const autoDetectTime = autoDetectResult.Total_time || 0;
+        const segmentedTime = segmentedResult.Total_time || 0;
+        const timeDifference = autoDetectTime - segmentedTime;
+        const fasterApproach = timeDifference > 0 ? 'Segmented-Parallel' : 'Auto-Detect';
         
         resultsHTML += `
             <div class="comparison-header">
                 <h2>🔄 Transcription Comparison</h2>
                 <div class="performance-summary">
                     <div class="performance-item">
-                        <span class="approach-label">Segmented:</span>
-                        <span class="time-value">${segmentedTime.toFixed(2)}s</span>
+                        <span class="approach-label">Auto-Detect:</span>
+                        <span class="time-value">${autoDetectTime.toFixed(2)}s</span>
                     </div>
                     <div class="performance-item">
-                        <span class="approach-label">Simple:</span>
-                        <span class="time-value">${simpleTime.toFixed(2)}s</span>
+                        <span class="approach-label">Segmented-Parallel:</span>
+                        <span class="time-value">${segmentedTime.toFixed(2)}s</span>
                     </div>
                     <div class="performance-item ${timeDifference > 0 ? 'faster' : 'slower'}">
-                        <span class="approach-label">Difference:</span>
-                        <span class="time-value">${Math.abs(timeDifference).toFixed(2)}s ${fasterApproach} is faster</span>
+                        <span class="approach-label">🏆 Fastest:</span>
+                        <span class="time-value">${fasterApproach} (${Math.min(autoDetectTime, segmentedTime).toFixed(2)}s)</span>
                     </div>
                 </div>
             </div>
         `;
         
-        // Segmented Approach Results
+        // Auto-detect Approach Results
         resultsHTML += `
-            <div class="approach-section segmented">
-                <h3>🎯 Segmented Approach</h3>
-                <p class="approach-description">Processes each segment separately with language detection</p>
+            <div class="approach-section auto-detect">
+                <h3>🤖 Auto-Detect Approach</h3>
+                <p class="approach-description">Uses Whisper with language detection prompt to automatically identify Portuguese and English</p>
         `;
         
-        if (segmentedResult.full_transcript) {
-            let highlightedTranscript = segmentedResult.full_transcript;
-            
-            if (segmentedResult.transcriptions && segmentedResult.transcriptions.length > 0) {
-                segmentedResult.transcriptions.forEach((segment) => {
-                    if (segment.language === 'english' && segment.text) {
-                        const escapedText = segment.text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-                        const regex = new RegExp(escapedText, 'g');
-                        const translation = segment.translation || 'Translation not available';
-                        const tooltipText = `English: ${segment.text}<br>Portuguese: ${translation}`;
-                        
-                        highlightedTranscript = highlightedTranscript.replace(
-                            regex,
-                            `<span class="english-highlight" title="${tooltipText}">${segment.text}</span>`
-                        );
-                    }
-                });
-            }
-            
+        if (autoDetectResult.Transcript) {
             resultsHTML += `
                 <div class="transcript-container">
                     <h4>Complete Transcript</h4>
-                    <div class="transcript-text">${highlightedTranscript}</div>
+                    <div class="transcript-text">${autoDetectResult.Transcript}</div>
                 </div>
             `;
-        }
-        
-        // Segmented translations
-        if (segmentedResult.transcriptions && segmentedResult.transcriptions.length > 0) {
-            const englishSegments = segmentedResult.transcriptions.filter(segment => segment.language === 'english');
-            if (englishSegments.length > 0) {
-                resultsHTML += `
-                    <div class="translations-container">
-                        <h4>🔤 English Phrases & Translations</h4>
-                        <div class="translations-list">
-                `;
-                
-                englishSegments.forEach((segment) => {
-                    const translation = segment.translation || 'Translation not available';
-                    resultsHTML += `
-                        <div class="translation-item">
-                            <div class="translation-english">
-                                <strong>English:</strong> ${segment.text}
-                            </div>
-                            <div class="translation-arrow">→</div>
-                            <div class="translation-portuguese">
-                                <strong>Portuguese:</strong> ${translation}
-                            </div>
-                        </div>
-                    `;
-                });
-                
-                resultsHTML += `
-                        </div>
-                    </div>
-                `;
-            }
         }
         
         resultsHTML += `</div>`;
         
-        // Simple Approach Results
+        // Segmented-Parallel Approach Results
         resultsHTML += `
-            <div class="approach-section simple">
-                <h3>⚡ Simple Approach</h3>
-                <p class="approach-description">Processes entire audio as Portuguese for better grammar flow</p>
+            <div class="approach-section segmented">
+                <h3>🎯 Segmented-Parallel Approach</h3>
+                <p class="approach-description">Splits audio into segments and transcribes each with language-specific prompts in parallel</p>
         `;
         
-        if (simpleResult.full_transcript) {
+        if (segmentedResult.Transcript) {
             resultsHTML += `
                 <div class="transcript-container">
                     <h4>Complete Transcript</h4>
-                    <div class="transcript-text">${simpleResult.full_transcript}</div>
+                    <div class="transcript-text">${segmentedResult.Transcript}</div>
                 </div>
             `;
+            
+            // Add detailed timing info if available
+            if (segmentedResult.Segmentation_time || segmentedResult.Transcription_time) {
+                resultsHTML += `
+                    <div class="timing-details">
+                        <h4>⏱️ Timing Breakdown</h4>
+                        <div class="timing-item">
+                            <span>Segmentation:</span>
+                            <span>${(segmentedResult.Segmentation_time || 0).toFixed(2)}s</span>
+                        </div>
+                        <div class="timing-item">
+                            <span>Transcription:</span>
+                            <span>${(segmentedResult.Transcription_time || 0).toFixed(2)}s</span>
+                        </div>
+                        <div class="timing-item">
+                            <span>Segments Processed:</span>
+                            <span>${segmentedResult.Segments_count || 0}</span>
+                        </div>
+                    </div>
+                `;
+            }
         }
         
         resultsHTML += `</div>`;

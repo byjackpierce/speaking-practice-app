@@ -5,18 +5,19 @@ A smart language learning tool that helps you practice Portuguese by recording y
 ## Current Features
 
 1. **Real-time Audio Recording** - Record your Portuguese speech with browser-based audio capture
-2. **Language Segment Marking** - Press spacebar to mark when you switch to English (with dramatic visual feedback)
-3. **Intelligent Audio Splitting** - Automatically separates Portuguese and English segments
-4. **Whisper Transcription** - AI-powered transcription for both languages
-5. **Clean Results Display** - See your complete transcript with English segments highlighted
+2. **Language Segment Marking** - Press spacebar to toggle between Portuguese and English modes
+3. **Complete Span Tracking** - Tracks all language segments with timestamps
+4. **Dual Transcription Approaches** - Compare auto-detect vs segmented-parallel methods
+5. **Performance Comparison** - Side-by-side timing and quality analysis
+6. **Clean Results Display** - See transcripts from both approaches with detailed metrics
 
 ## How It Works
 
 1. **Start Recording** - Click "Start Recording" and begin speaking Portuguese
-2. **Mark English Segments** - Press spacebar when you need to switch to English for unknown words/phrases
+2. **Mark Language Segments** - Press spacebar to toggle between Portuguese and English modes
    - The interface dramatically changes to blue/purple theme to indicate English mode
 3. **Stop Recording** - Click "Stop Recording" when finished
-4. **View Results** - See your complete transcript with English segments subtly highlighted
+4. **Compare Results** - View transcripts from both approaches side-by-side with performance metrics
 
 ## Tech Stack
 
@@ -28,10 +29,11 @@ A smart language learning tool that helps you practice Portuguese by recording y
 
 ## Next Steps
 
-- Translation of English segments to Portuguese
-- Flashcard generation for practice
-- Content generation for continued learning
-- Database for vocabulary tracking
+- **Segmented-Parallel Approach** - Implement parallel transcription of individual segments
+- **Performance Comparison** - Compare auto-detect vs segmented approaches
+- **Translation Integration** - Add Portuguese translations for English segments
+- **Flashcard Generation** - Create practice cards from identified gaps
+- **Database Integration** - Store vocabulary and learning progress
 
 ## Contributing
 
