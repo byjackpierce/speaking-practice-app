@@ -15,11 +15,10 @@ Portuguese Gap-Capture API
 ==========================
 
 FastAPI application for processing mixed Portuguese-English audio recordings.
-Currently supports auto-detect and segmented-parallel transcription approaches.
+Uses segmented-parallel transcription approach for optimal language detection.
 
 Endpoints:
-- POST /process-recording-auto-detect: Auto-detect transcription
-- POST /process-recording-segmented-parallel: Segmented-parallel transcription
+- POST /process-recording: Segmented-parallel transcription
 - GET /: Frontend interface
 - GET /api/health: Health check
 """
@@ -46,96 +45,9 @@ async def root():
 async def health():
     return {"message": "Portuguese gap-capture backend"}
 
-@app.post("/process-recording-auto-detect")
-async def process_recording_auto_detect(
-    audio: UploadFile = File(...),
-    spans: str = Form(...),
-    duration: str = Form(...)
-):
-    """
-    Process audio recording using auto-detect approach.
-    
-    Uses Whisper API with a specific prompt to automatically detect and transcribe
-    mixed Portuguese-English speech without manual segmentation.
-    
-    Args:
-        audio: Audio file upload
-        spans: JSON string of language spans (Portuguese and English with timestamps)
-        duration: Recording duration in seconds
-        
-    Returns:
-        Dict containing transcript and performance metrics
-    """
-    # Initialize temp file path for cleanup
-    temp_file_path = None
-    
-    try:
-        # Start performance tracking
-        start_transcription = time.time()
-
-        # Parse input data
-        spans_data = json.loads(spans)
-        duration_float = float(duration)
-        audio_content = await audio.read()
-        client = OpenAI()
-
-        # Create temporary file for Whisper API
-        with tempfile.NamedTemporaryFile(delete=False, suffix=".wav") as temp_file:
-            temp_file.write(audio_content)
-            temp_file_path = temp_file.name
-
-            # Transcribe with auto-detect prompt
-            with open(temp_file_path, "rb") as audio_file:
-                transcript = client.audio.transcriptions.create(
-                    model="whisper-1",
-                    file=audio_file,
-                    prompt="Language learning: there will be a mix of Portuguese and English. Transcribe each language as spoken. No translation between the two."
-                )
-            
-            logger.info(f"Auto-detect transcription completed: '{transcript.text[:100]}...'")
-
-            # Calculate processing time
-            end_transcription = time.time()
-
-            # Return results in consistent format for comparison
-            return {
-                'Approach': "auto_detect",
-                'Duration': duration_float,
-                'Transcript': transcript.text,
-                'Spans_count': len(spans_data),
-                'Total_time': end_transcription - start_transcription  
-            }
-            
-    except Exception as e:
-        logger.error(f"Auto-detect transcription failed: {str(e)}")
-        return {
-            "error": f"Transcription failed: {str(e)}",
-            "duration": duration_float,
-            "spans_count": len(spans_data)
-        }
-
-    finally:
-        # Clean up temporary file (safe even if temp_file_path wasn't created)
-        if temp_file_path and os.path.exists(temp_file_path):
-            os.unlink(temp_file_path)
-
-def create_segments_from_spans(audio_path, spans_data, sample_rate):
-    """
-    Create audio segments from spans data.
-    
-    Args:
-        audio_path: Path to the audio file
-        spans_data: List of span dictionaries with start, end, language
-        sample_rate: Audio sample rate
-        
-    Returns:
-        List of segment dictionaries with audio data and metadata
-    """
+def create_segments_from_spans(audio_data, spans_data, sample_rate):
+    """Create audio segments from spans data."""
     segments = []
-
-    # Load the full audio
-    audio_data, _ = librosa.load(audio_path, sr=sample_rate)
-
     for i, span in enumerate(spans_data):
         # Convert time to sample indices (must be integers)
         start_sample = int(span['start'] * sample_rate)
@@ -145,21 +57,19 @@ def create_segments_from_spans(audio_path, spans_data, sample_rate):
         segment_audio = audio_data[start_sample:end_sample]
 
         # Create segment object
-        segment = {
+        segments.append({
             'index': i,
             'start_time': span['start'],
             'end_time': span['end'],
             'language': span['language'],
             'audio_data': segment_audio,
             'sample_rate': sample_rate
-        }
-
-        segments.append(segment)
+        })
 
     return segments
 
-@app.post("/process-recording-segmented-parallel")
-async def process_recording_segmented_parallel(
+@app.post("/process-recording")
+async def process_recording(
     audio: UploadFile = File(...),
     spans: str = Form(...),
     duration: str = Form(...)
@@ -201,15 +111,14 @@ async def process_recording_segmented_parallel(
         
         # Step 2: Create segments from spans
         segmentation_start = time.time()
-        segments = create_segments_from_spans(temp_file_path, spans_data, sample_rate)
+        segments = create_segments_from_spans(audio_data, spans_data, sample_rate)
         segmentation_end = time.time()
         
         logger.info(f"Created {len(segments)} segments from {len(spans_data)} spans")
 
         async def transcribe_segment_parallel(segment, client):
-            """
-            Transcribe a single segment in parallel.
-            """
+            """Transcribe a single segment in parallel."""
+            segment_start = time.time()
             try:
                 # Create temporary file for this segment
                 with tempfile.NamedTemporaryFile(delete=False, suffix=".wav") as temp_segment_file:
@@ -235,11 +144,16 @@ async def process_recording_segmented_parallel(
                     # Clean up segment file
                     os.unlink(temp_segment_path)
                     
+                    segment_end = time.time()
+                    segment_duration = segment_end - segment_start
+                    logger.info(f"Segment {segment['index']} ({segment['language']}) completed in {segment_duration:.2f}s: '{transcript.text[:50]}...'")
+                    
                     return {
                         'start_time': segment['start_time'],
                         'end_time': segment['end_time'],
                         'language': segment['language'],
-                        'text': transcript.text
+                        'text': transcript.text,
+                        'processing_time': segment_duration
                     }
                     
             except Exception as e:
@@ -254,8 +168,7 @@ async def process_recording_segmented_parallel(
         # Step 3: Transcribe all segments in parallel
         transcription_start = time.time()
         transcription_tasks = [
-            transcribe_segment_parallel(segment, client) 
-            for segment in segments
+            transcribe_segment_parallel(segment, client) for segment in segments
         ]
         transcription_results = await asyncio.gather(*transcription_tasks)
         transcription_end = time.time()
@@ -267,22 +180,22 @@ async def process_recording_segmented_parallel(
         # Step 5: Calculate final timing
         end_transcription = time.time()
 
-        logger.info(f"Segmented-parallel transcription completed: '{full_transcript[:100]}...'")
+        logger.info(f"Transcription completed: '{full_transcript[:100]}...'")
 
-        # Return results in consistent format for comparison
+        # Return results
         return {
-            'Approach': "segmented_parallel",
-            'Duration': duration_float,
-            'Transcript': full_transcript,
-            'Spans_count': len(spans_data),
-            'Segments_count': len(segments),
-            'Total_time': end_transcription - start_transcription,
-            'Segmentation_time': segmentation_end - segmentation_start,
-            'Transcription_time': transcription_end - transcription_start
+            'transcript': full_transcript,
+            'duration': duration_float,
+            'spans_count': len(spans_data),
+            'segments_count': len(segments),
+            'total_time': end_transcription - start_transcription,
+            'segmentation_time': segmentation_end - segmentation_start,
+            'transcription_time': transcription_end - transcription_start,
+            'segment_timings': [result['processing_time'] for result in transcription_results]
         }
             
     except Exception as e:
-        logger.error(f"Segmented-parallel transcription failed: {str(e)}")
+        logger.error(f"Transcription failed: {str(e)}")
         return {
             "error": f"Transcription failed: {str(e)}",
             "duration": duration_float,

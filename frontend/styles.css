@@ -329,175 +329,78 @@ header p {
     text-align: center;
 }
 
-/* Comparison Styles */
-.comparison-header {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    padding: 2rem;
-    border-radius: 16px;
+.result-header {
+    text-align: center;
     margin-bottom: 2rem;
+}
+
+.result-header h2 {
+    color: #333;
+    font-size: 1.8rem;
+    font-weight: 600;
+}
+
+.transcript-section {
+    background: #f8f9fa;
+    border-radius: 12px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.transcript-text {
+    font-size: 1.2rem;
+    line-height: 1.6;
+    color: #333;
+    white-space: pre-wrap;
+}
+
+.info-section {
+    display: flex;
+    justify-content: space-around;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.info-item {
+    background: white;
+    padding: 1rem 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    min-width: 120px;
+}
+
+.info-label {
+    display: block;
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+}
+
+.info-value {
+    display: block;
+    font-size: 1.1rem;
+    color: #333;
+    font-weight: 600;
+}
+
+.error-section {
+    background: #fee;
+    border: 1px solid #fcc;
+    border-radius: 8px;
+    padding: 1.5rem;
     text-align: center;
 }
 
-.comparison-header h2 {
-    margin: 0 0 1.5rem 0;
-    font-size: 2rem;
-}
-
-.performance-summary {
-    display: flex;
-    justify-content: space-around;
-    flex-wrap: wrap;
-    gap: 1rem;
-}
-
-.performance-item {
-    background: rgba(255, 255, 255, 0.1);
-    padding: 1rem;
-    border-radius: 8px;
-    min-width: 150px;
-}
-
-.approach-label {
-    display: block;
-    font-weight: 600;
+.error-section h4 {
+    color: #c33;
     margin-bottom: 0.5rem;
 }
 
-.time-value {
-    font-size: 1.2rem;
-    font-weight: bold;
-}
-
-.performance-item.fastest {
-    background: rgba(255, 193, 7, 0.2);
-    border: 2px solid #ffc107;
-    animation: fastestGlow 2s infinite alternate;
-}
-
-@keyframes fastestGlow {
-    0% { box-shadow: 0 0 5px rgba(255, 193, 7, 0.3); }
-    100% { box-shadow: 0 0 15px rgba(255, 193, 7, 0.6); }
-}
-
-.performance-item.faster {
-    background: rgba(40, 167, 69, 0.2);
-    border: 2px solid #28a745;
-}
-
-.performance-item.slower {
-    background: rgba(220, 53, 69, 0.2);
-    border: 2px solid #dc3545;
-}
-
-.approach-section {
-    background: white;
-    border-radius: 16px;
-    padding: 2rem;
-    margin-bottom: 2rem;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-}
-
-
-
-.approach-section.auto-detect {
-    border-left: 5px solid #ff6b35;
-}
-
-.approach-section.segmented {
-    border-left: 5px solid #667eea;
-}
-
-.approach-section h3 {
-    color: #333;
-    margin-bottom: 0.5rem;
-    font-size: 1.5rem;
-}
-
-.approach-description {
+.error-section p {
     color: #666;
-    font-style: italic;
-    margin-bottom: 1.5rem;
-}
-
-.approach-section h4 {
-    color: #667eea;
-    margin: 1.5rem 0 1rem 0;
-    font-size: 1.2rem;
-}
-
-.translations-list {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-}
-
-.translation-item {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    padding: 1.5rem;
-    background: white;
-    border-radius: 10px;
-    border-left: 5px solid #667eea;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    transition: all 0.3s ease;
-}
-
-.translation-item:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.2);
-}
-
-.translation-english {
-    font-weight: 600;
-    color: #495057;
-    flex: 1;
-}
-
-.translation-arrow {
-    color: #667eea;
-    font-weight: bold;
-    font-size: 1.2rem;
-}
-
-.translation-portuguese {
-    font-weight: 500;
-    color: #28a745;
-    flex: 1;
-}
-
-.timing-details {
-    background: #f8f9fa;
-    border-radius: 8px;
-    padding: 1rem;
-    margin-top: 1rem;
-}
-
-.timing-details h4 {
-    color: #667eea;
-    margin-bottom: 0.5rem;
-}
-
-.timing-item {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 0.25rem;
-    font-size: 0.9rem;
-}
-
-
-
-
-
-
-
-.segment-language.english {
-    background: #3742fa;
-}
-
-.segment-language.portuguese {
-    background: #28a745;
 }
 
 @media (max-width: 600px) {
