@@ -69,11 +69,16 @@ def save_transcript(results: dict):
             "timestamp": datetime.now().isoformat(),
             "duration": results["duration"],
             "transcript": results["transcript"],
+            "raw_transcript": results.get("raw_transcript", ""), 
             "spans_count": results["spans_count"],
             "segments_count": results["segments_count"],
             "total_time": results["total_time"],
+            "parsing_time": results["parsing_time"],
+            "file_setup_time": results["file_setup_time"],
+            "audio_loading_time": results["audio_loading_time"],
             "segmentation_time": results["segmentation_time"],
             "transcription_time": results["transcription_time"],
+            "grammar_correction_time": results.get("grammar_correction_time", 0),
             "segment_timings": results["segment_timings"]
         }
         
@@ -114,6 +119,42 @@ def create_segments_from_spans(audio_data, spans_data, sample_rate):
 
     return segments
 
+def apply_grammar_correction(transcript: str) -> str:
+    """
+    Apply grammar correction to mixed Portuguese-English transcript.
+    
+    Args:
+        transcript: Raw transcript with mixed languages
+        
+    Returns:
+        Grammar-corrected transcript with natural flow
+    """
+    client = OpenAI()
+    
+    prompt = f"""
+You are a language expert who corrects ONLY grammar in mixed Portuguese-English text.
+
+IMPORTANT: Do NOT translate any words. Keep Portuguese words in Portuguese and English words in English.
+Only fix grammar structure, word order, and flow. Remove incomplete phrases like "...".
+
+Example input: "Eu quero falar de outra coisa, por exemplo... the kitchen and what I'm going to e cozinhar para jantar."
+Example output: "Eu quero falar de outra coisa, por exemplo the kitchen and what I'm going to cozinhar para jantar."
+
+Input: "{transcript}"
+Output:"""
+    
+    response = client.chat.completions.create(
+        model="gpt-3.5-turbo",
+        messages=[
+            {"role": "system", "content": "You are a grammar expert. Fix ONLY grammar, NEVER translate. Keep original languages intact."},
+            {"role": "user", "content": prompt}
+        ],
+        max_tokens=300,
+        temperature=0.6
+    )
+    
+    return response.choices[0].message.content.strip()
+
 @app.post("/process-recording")
 async def process_recording(
     audio: UploadFile = File(...),
@@ -142,18 +183,24 @@ async def process_recording(
         start_transcription = time.time()
 
         # Parse input data
+        parsing_start = time.time()
         spans_data = json.loads(spans)
         duration_float = float(duration)
         audio_content = await audio.read()
         client = OpenAI()
+        parsing_end = time.time()
 
         # Create temporary file for audio processing
+        file_setup_start = time.time()
         with tempfile.NamedTemporaryFile(delete=False, suffix=".wav") as temp_file:
             temp_file.write(audio_content)
             temp_file_path = temp_file.name
+        file_setup_end = time.time()
 
         # Step 1: Load audio and get sample rate
+        audio_loading_start = time.time()
         audio_data, sample_rate = librosa.load(temp_file_path, sr=None)
+        audio_loading_end = time.time()
         
         # Step 2: Create segments from spans
         segmentation_start = time.time()
@@ -222,21 +269,31 @@ async def process_recording(
         # Step 4: Sort results by start time and combine
         transcription_results.sort(key=lambda x: x['start_time'])
         full_transcript = " ".join([result['text'] for result in transcription_results])
-        
+
+        # Step 4.5: Grammar correction pass ✨
+        grammar_start = time.time()
+        corrected_transcript = apply_grammar_correction(full_transcript)
+        grammar_end = time.time()
+
         # Step 5: Calculate final timing
         end_transcription = time.time()
 
         logger.info(f"Transcription completed: '{full_transcript[:100]}...'")
 
-        # Return results
+        # Return results with detailed timing
         results = {
-            'transcript': full_transcript,
+            'transcript': corrected_transcript,  # ← Now the corrected version
+            'raw_transcript': full_transcript,   # ← Keep original for comparison
             'duration': duration_float,
             'spans_count': len(spans_data),
             'segments_count': len(segments),
             'total_time': end_transcription - start_transcription,
+            'parsing_time': parsing_end - parsing_start,
+            'file_setup_time': file_setup_end - file_setup_start,
+            'audio_loading_time': audio_loading_end - audio_loading_start,
             'segmentation_time': segmentation_end - segmentation_start,
             'transcription_time': transcription_end - transcription_start,
+            'grammar_correction_time': grammar_end - grammar_start,  # ← New timing
             'segment_timings': [result['processing_time'] for result in transcription_results]
         }
 

@@ -1,17 +1,42 @@
 [
   {
-    "timestamp": "2025-08-24T16:50:20.588929",
-    "duration": 7.539,
-    "transcript": "Quero fazer outra prova. Just checking something else. I want to see se funcionar.",
+    "timestamp": "2025-08-24T17:21:36.800978",
+    "duration": 12.107,
+    "transcript": "\"Vamos fazer de novo, porque n\u00e3o est\u00e1 funcionando como era. I wanted it to, but... N\u00e3o tem problema n\u00e3o.\"",
+    "raw_transcript": "Vamos fazer de novo, porque n\u00e3o est\u00e1 funcionando como era. wanted it to, but... N\u00e3o tem problema n\u00e3o.",
     "spans_count": 3,
     "segments_count": 3,
-    "total_time": 13.220868110656738,
-    "segmentation_time": 2.002716064453125e-05,
-    "transcription_time": 11.272902011871338,
+    "total_time": 10.687884092330933,
+    "parsing_time": 0.03776717185974121,
+    "file_setup_time": 0.0005156993865966797,
+    "audio_loading_time": 0.17861318588256836,
+    "segmentation_time": 2.4080276489257812e-05,
+    "transcription_time": 9.209195852279663,
+    "grammar_correction_time": 1.261582851409912,
     "segment_timings": [
-      2.354365110397339,
-      4.131190061569214,
-      4.783155918121338
+      3.035572052001953,
+      3.566051721572876,
+      2.605456829071045
+    ]
+  },
+  {
+    "timestamp": "2025-08-24T17:22:48.905029",
+    "duration": 11.225,
+    "transcript": "\"Vamos fazer de novo, porque n\u00e3o est\u00e1 funcionando como I wanted it to, but... N\u00e3o tem problema n\u00e3o.\"",
+    "raw_transcript": "Vamos fazer de novo, porque n\u00e3o est\u00e1 funcionando como... I wanted it to, but... N\u00e3o tem problema n\u00e3o.",
+    "spans_count": 3,
+    "segments_count": 3,
+    "total_time": 13.586853265762329,
+    "parsing_time": 0.049311161041259766,
+    "file_setup_time": 0.0012040138244628906,
+    "audio_loading_time": 1.5342531204223633,
+    "segmentation_time": 1.5974044799804688e-05,
+    "transcription_time": 10.9735848903656,
+    "grammar_correction_time": 1.0283401012420654,
+    "segment_timings": [
+      5.350008010864258,
+      3.464931011199951,
+      2.157102108001709
     ]
   }
 ]
