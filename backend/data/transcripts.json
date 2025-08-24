@@ -1,0 +1,17 @@
+[
+  {
+    "timestamp": "2025-08-24T16:50:20.588929",
+    "duration": 7.539,
+    "transcript": "Quero fazer outra prova. Just checking something else. I want to see se funcionar.",
+    "spans_count": 3,
+    "segments_count": 3,
+    "total_time": 13.220868110656738,
+    "segmentation_time": 2.002716064453125e-05,
+    "transcription_time": 11.272902011871338,
+    "segment_timings": [
+      2.354365110397339,
+      4.131190061569214,
+      4.783155918121338
+    ]
+  }
+]

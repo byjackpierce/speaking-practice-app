@@ -44,6 +44,52 @@ async def root():
 @app.get("/api/health")
 async def health():
     return {"message": "Portuguese gap-capture backend"}
+    
+
+def save_transcript(results: dict):
+    """Save transcript to JSON file."""
+    from datetime import datetime
+    import logging
+    
+    file_path = "data/transcripts.json"
+    
+    try:
+        # Create data directory if it doesn't exist
+        os.makedirs("data", exist_ok=True)
+        
+        # Load existing transcripts or create new list
+        try:
+            with open(file_path, "r") as file:
+                all_results = json.load(file)
+        except (FileNotFoundError, json.JSONDecodeError):
+            all_results = []
+        
+        # Add new transcript
+        new_transcript = {
+            "timestamp": datetime.now().isoformat(),
+            "duration": results["duration"],
+            "transcript": results["transcript"],
+            "spans_count": results["spans_count"],
+            "segments_count": results["segments_count"],
+            "total_time": results["total_time"],
+            "segmentation_time": results["segmentation_time"],
+            "transcription_time": results["transcription_time"],
+            "segment_timings": results["segment_timings"]
+        }
+        
+        all_results.append(new_transcript)
+        
+        # Save back to file
+        with open(file_path, "w") as file:
+            json.dump(all_results, file, indent=2)
+            
+        logger.info(f"Saved transcript {len(all_results)} to {file_path}")
+        
+    except Exception as e:
+        logger.error(f"Failed to save transcript: {str(e)}")
+        # Don't crash the main function if saving fails
+        pass
+
 
 def create_segments_from_spans(audio_data, spans_data, sample_rate):
     """Create audio segments from spans data."""
@@ -183,7 +229,7 @@ async def process_recording(
         logger.info(f"Transcription completed: '{full_transcript[:100]}...'")
 
         # Return results
-        return {
+        results = {
             'transcript': full_transcript,
             'duration': duration_float,
             'spans_count': len(spans_data),
@@ -193,6 +239,10 @@ async def process_recording(
             'transcription_time': transcription_end - transcription_start,
             'segment_timings': [result['processing_time'] for result in transcription_results]
         }
+
+        save_transcript(results)
+
+        return results
             
     except Exception as e:
         logger.error(f"Transcription failed: {str(e)}")
