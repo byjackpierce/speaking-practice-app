@@ -116,7 +116,7 @@ def create_segments_from_spans(audio_data, spans_data, sample_rate):
             'audio_data': segment_audio,
             'sample_rate': sample_rate
         })
-
+    
     return segments
 
 def apply_grammar_correction(transcript: str) -> str:
@@ -132,16 +132,16 @@ def apply_grammar_correction(transcript: str) -> str:
     client = OpenAI()
     
     prompt = f"""
-You are a language expert who corrects ONLY grammar in mixed Portuguese-English text.
+                You are a language expert who corrects ONLY grammar in mixed Portuguese-English text.
 
-IMPORTANT: Do NOT translate any words. Keep Portuguese words in Portuguese and English words in English.
-Only fix grammar structure, word order, and flow. Remove incomplete phrases like "...".
+                IMPORTANT: Do NOT translate any words. Keep Portuguese words in Portuguese and English words in English.
+                Only fix grammar structure, word order, and flow. Remove incomplete phrases like "...".
 
-Example input: "Eu quero falar de outra coisa, por exemplo... the kitchen and what I'm going to e cozinhar para jantar."
-Example output: "Eu quero falar de outra coisa, por exemplo the kitchen and what I'm going to cozinhar para jantar."
+                Example input: "Eu quero falar de outra coisa, por exemplo... the kitchen and what I'm going to e cozinhar para jantar."
+                Example output: "Eu quero falar de outra coisa, por exemplo the kitchen and what I'm going to cozinhar para jantar."
 
-Input: "{transcript}"
-Output:"""
+                Input: "{transcript}"
+                Output:"""
     
     response = client.chat.completions.create(
         model="gpt-3.5-turbo",
@@ -282,8 +282,8 @@ async def process_recording(
 
         # Return results with detailed timing
         results = {
-            'transcript': corrected_transcript,  # ← Now the corrected version
-            'raw_transcript': full_transcript,   # ← Keep original for comparison
+            'transcript': corrected_transcript,
+            'raw_transcript': full_transcript,  
             'duration': duration_float,
             'spans_count': len(spans_data),
             'segments_count': len(segments),
@@ -293,14 +293,14 @@ async def process_recording(
             'audio_loading_time': audio_loading_end - audio_loading_start,
             'segmentation_time': segmentation_end - segmentation_start,
             'transcription_time': transcription_end - transcription_start,
-            'grammar_correction_time': grammar_end - grammar_start,  # ← New timing
+            'grammar_correction_time': grammar_end - grammar_start,
             'segment_timings': [result['processing_time'] for result in transcription_results]
         }
 
         save_transcript(results)
 
         return results
-            
+
     except Exception as e:
         logger.error(f"Transcription failed: {str(e)}")
         return {
