@@ -1,51 +1,38 @@
-from fastapi import FastAPI, UploadFile, File, Form
-from fastapi.staticfiles import StaticFiles
-from fastapi.responses import FileResponse
+#region IMPORTS
+# Standard library
 import json
 import os
 import tempfile
 import time
-from openai import OpenAI
 import asyncio
-import soundfile
+
+# Third-party
+from fastapi import FastAPI, UploadFile, File, Form
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
+from openai import OpenAI
+import soundfile 
 import librosa
 
-"""
-Portuguese Gap-Capture API
-==========================
-
-FastAPI application for processing mixed Portuguese-English audio recordings.
-Uses segmented-parallel transcription approach for optimal language detection.
-
-Endpoints:
-- POST /process-recording: Segmented-parallel transcription
-- GET /: Frontend interface
-- GET /api/health: Health check
-"""
-
-# Import our modular components
+# Local
 from config.settings import settings
 from config.logging import logger
 from middleware.cors import setup_cors
+#endregion
 
-# Create FastAPI app
+#region CONFIGURATION
+from config.settings import settings
+from config.logging import logger
+from middleware.cors import setup_cors
+#endregion
+
+#region APP SETUP
 app = FastAPI(title=settings.APP_TITLE, version=settings.APP_VERSION)
-
-# Mount static files for frontend
 app.mount("/static", StaticFiles(directory=settings.STATIC_FILES_DIR), name="static")
-
-# Setup CORS middleware
 setup_cors(app)
+#endregion
 
-@app.get("/")
-async def root():
-    return FileResponse("../frontend/index.html")
-
-@app.get("/api/health")
-async def health():
-    return {"message": "Portuguese gap-capture backend"}
-    
-
+#region UTILITY FUNCTIONS
 def save_transcript(results: dict):
     """Save transcript to JSON file."""
     from datetime import datetime
@@ -79,7 +66,10 @@ def save_transcript(results: dict):
             "segmentation_time": results["segmentation_time"],
             "transcription_time": results["transcription_time"],
             "grammar_correction_time": results.get("grammar_correction_time", 0),
-            "segment_timings": results["segment_timings"]
+            "segment_timings": results["segment_timings"],
+            "english_segments": results["english_segments"],
+            "translations": results["translations"],
+            "corrected_transcript": results["corrected_transcript"]
         }
         
         all_results.append(new_transcript)
@@ -94,7 +84,6 @@ def save_transcript(results: dict):
         logger.error(f"Failed to save transcript: {str(e)}")
         # Don't crash the main function if saving fails
         pass
-
 
 def create_segments_from_spans(audio_data, spans_data, sample_rate):
     """Create audio segments from spans data."""
@@ -131,36 +120,140 @@ def apply_grammar_correction(transcript: str) -> str:
     """
     client = OpenAI()
     
+    logger.info(f"=== GRAMMAR CORRECTION INPUT === '{transcript}'")
+    
     prompt = f"""
-                You are a language expert who corrects ONLY grammar in mixed Portuguese-English text.
+    You are a language expert who corrects ONLY grammar in mixed Portuguese-English text.
 
-                IMPORTANT: Do NOT translate any words. Keep Portuguese words in Portuguese and English words in English.
-                Only fix grammar structure, word order, and flow. Remove incomplete phrases like "...".
+    IMPORTANT: Do NOT translate any words. Keep Portuguese words in Portuguese and English words in English.
+    Only fix grammar structure, word order, and flow. Remove incomplete phrases like "...".
 
-                Example input: "Eu quero falar de outra coisa, por exemplo... the kitchen and what I'm going to e cozinhar para jantar."
-                Example output: "Eu quero falar de outra coisa, por exemplo the kitchen and what I'm going to cozinhar para jantar."
+    Example input: Eu quero falar de outra coisa, por exemplo... the kitchen and what I'm going to e cozinhar para jantar.
+    Example output: Eu quero falar de outra coisa, por exemplo the kitchen and what I'm going to cozinhar para jantar.
 
-                Input: "{transcript}"
-                Output:"""
+    NEVER show "" (quotation marks) or ... (ellipsis) in the output.
+
+    Input: "{transcript}"
+    Output:"""
     
     response = client.chat.completions.create(
-        model="gpt-3.5-turbo",
+        model="gpt-4",
         messages=[
             {"role": "system", "content": "You are a grammar expert. Fix ONLY grammar, NEVER translate. Keep original languages intact."},
             {"role": "user", "content": prompt}
         ],
-        max_tokens=300,
-        temperature=0.6
+        max_completion_tokens=300,
+        temperature=0.1
     )
     
-    return response.choices[0].message.content.strip()
+    corrected_text = response.choices[0].message.content.strip()
+    logger.info(f"=== GRAMMAR CORRECTION OUTPUT === '{corrected_text}'")
+    
+    return corrected_text
+
+def extract_english_segments(transcription_results):
+    """
+    Extract English segments from transcription results.
+    
+    Args:
+        transcription_results: List of segment results from transcription
+        
+    Returns:
+        List of English segments with timing, original text, and clean text
+    """
+    english_segments = []
+    
+    for result in transcription_results:
+        if result['language'] == 'english':
+            original_text = result['text']
+            
+            # Create clean version for matching after grammar correction
+            clean_text = original_text.strip()
+            # Remove common punctuation that might be removed by grammar correction
+            clean_text = clean_text.rstrip('.,;:!?')
+            # Normalize spacing
+            clean_text = ' '.join(clean_text.split())
+            
+            english_segments.append({
+                'text': original_text,
+                'clean_text': clean_text,
+                'start_time': result['start_time'],
+                'end_time': result['end_time']
+            })
+    
+    return english_segments
+
+def translate_english_segments(english_segments):
+    """
+    Translate English segments to Portuguese.
+    
+    Args:
+        english_segments: List of English segments with text and timing
+        
+    Returns:
+        List of translation pairs (English -> Portuguese)
+    """
+    if not english_segments:
+        return []
+    
+    client = OpenAI()
+    translations = []
+    
+    for segment in english_segments:
+        prompt = f"""
+    Translate this English phrase to Portuguese. Provide only the Portuguese translation, no explanations.
+
+    Do not include any of the following in the output:
+    - Double quotes ("")
+    - Single quotes ('')
+    - Ellipsis (...)
+    - Commas (,)
+    - Periods (.)
+    - Any other punctuation marks
+
+    English: {segment['text']}
+    Portuguese:"""
+        
+        response = client.chat.completions.create(
+            model="gpt-4",
+            messages=[
+                {"role": "system", "content": "You are a Portuguese translator. Provide only the translation, no explanations."},
+                {"role": "user", "content": prompt}
+            ],
+            max_tokens=50,
+            temperature=0.1
+        )
+        
+        portuguese_translation = response.choices[0].message.content.strip()
+        
+        translations.append({
+            'english': segment['text'],  # Original text for display
+            'english_clean': segment['clean_text'],  # Clean text for matching
+            'portuguese': portuguese_translation,
+            'start_time': segment['start_time'],
+            'end_time': segment['end_time']
+        })
+    
+    return translations
+#endregion
+
+#region API ENDPOINTS
+
+@app.get("/")
+async def root():
+    return FileResponse("../frontend/index.html")
+
+@app.get("/api/health")
+async def health():
+    return {"message": "Portuguese gap-capture backend"}
+    
 
 @app.post("/process-recording")
 async def process_recording(
     audio: UploadFile = File(...),
     spans: str = Form(...),
     duration: str = Form(...)
-):
+    ):
     """
     Process audio recording using segmented-parallel approach.
     
@@ -268,9 +361,26 @@ async def process_recording(
 
         # Step 4: Sort results by start time and combine
         transcription_results.sort(key=lambda x: x['start_time'])
+        
+        # Log each segment before combining
+        logger.info("=== SEGMENTS BEFORE COMBINING ===")
+        for i, result in enumerate(transcription_results):
+            logger.info(f"Segment {i}: [{result['language']}] '{result['text']}'")
+        
         full_transcript = " ".join([result['text'] for result in transcription_results])
+        logger.info(f"=== COMBINED TRANSCRIPT === '{full_transcript}'")
 
-        # Step 4.5: Grammar correction pass ✨
+        # Step 4.5: Extract English segments for translation
+        english_segments = extract_english_segments(transcription_results)
+        logger.info(f"Extracted {len(english_segments)} English segments for translation")
+
+        # Step 4.6: Translate English segments
+        translation_start = time.time()
+        translations = translate_english_segments(english_segments)
+        translation_end = time.time()
+        logger.info(f"Translated {len(translations)} English segments in {translation_end - translation_start:.2f}s")
+
+        # Step 4.7: Grammar correction pass ✨
         grammar_start = time.time()
         corrected_transcript = apply_grammar_correction(full_transcript)
         grammar_end = time.time()
@@ -283,7 +393,9 @@ async def process_recording(
         # Return results with detailed timing
         results = {
             'transcript': corrected_transcript,
-            'raw_transcript': full_transcript,  
+            'raw_transcript': full_transcript,
+            'english_segments': english_segments,
+            'translations': translations,
             'duration': duration_float,
             'spans_count': len(spans_data),
             'segments_count': len(segments),
@@ -293,8 +405,13 @@ async def process_recording(
             'audio_loading_time': audio_loading_end - audio_loading_start,
             'segmentation_time': segmentation_end - segmentation_start,
             'transcription_time': transcription_end - transcription_start,
+            'translation_time': translation_end - translation_start, 
             'grammar_correction_time': grammar_end - grammar_start,
-            'segment_timings': [result['processing_time'] for result in transcription_results]
+            'segment_timings': [result['processing_time'] for result in transcription_results],
+            'english_segments': english_segments,
+            'translations': translations,
+            'corrected_transcript': corrected_transcript,
+            'full_transcript': full_transcript
         }
 
         save_transcript(results)
@@ -308,8 +425,9 @@ async def process_recording(
             "duration": duration_float,
             "spans_count": len(spans_data)
         }
-
-    finally:
-        # Clean up temporary file (safe even if temp_file_path wasn't created)
+    
+    finally: # Clean up temporary file (safe even if temp_file_path wasn't created)
         if temp_file_path and os.path.exists(temp_file_path):
             os.unlink(temp_file_path)
+
+#endregion

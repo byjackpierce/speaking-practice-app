@@ -63,10 +63,7 @@ header p {
     animation: pulse 1.5s infinite;
 }
 
-.status-dot.english {
-    background: #3742fa;
-    animation: pulse 0.8s infinite;
-}
+
 
 .status-dot.english-recording {
     background: #667eea;
@@ -192,9 +189,7 @@ header p {
     transition: all 0.3s ease;
 }
 
-.lang-badge.english {
-    background: #3742fa;
-}
+
 
 .lang-badge.english-mode {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -268,66 +263,11 @@ header p {
     white-space: pre-wrap;
 }
 
-.english-highlight {
-    background: linear-gradient(120deg, #fff3cd 0%, #ffeaa7 100%);
-    padding: 0.2rem 0.4rem;
-    border-radius: 4px;
-    font-weight: 500;
-    border-bottom: 2px solid #fdcb6e;
-    transition: all 0.3s ease;
-    cursor: pointer;
-    position: relative;
-}
 
-.english-highlight:hover {
-    background: linear-gradient(120deg, #ffeaa7 0%, #fdcb6e 100%);
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(253, 203, 110, 0.3);
-}
 
-.english-highlight:hover::after {
-    content: "Click for translation";
-    position: absolute;
-    bottom: 100%;
-    left: 50%;
-    transform: translateX(-50%);
-    background: #333;
-    color: white;
-    padding: 0.5rem;
-    border-radius: 4px;
-    font-size: 0.8rem;
-    white-space: nowrap;
-    z-index: 1000;
-    margin-bottom: 0.5rem;
-}
 
-.english-highlight:hover::before {
-    content: "";
-    position: absolute;
-    bottom: 100%;
-    left: 50%;
-    transform: translateX(-50%);
-    border: 5px solid transparent;
-    border-top-color: #333;
-    margin-bottom: -5px;
-    z-index: 1000;
-}
 
-.translations-container {
-    background: linear-gradient(135deg, #f8f9ff 0%, #f0f2ff 100%);
-    border-radius: 12px;
-    padding: 2rem;
-    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15);
-    margin-top: 2rem;
-    border: 2px solid #667eea;
-}
 
-.translations-container h3 {
-    color: #667eea;
-    margin-bottom: 1.5rem;
-    font-size: 1.5rem;
-    text-align: center;
-}
 
 .result-header {
     text-align: center;
@@ -401,6 +341,52 @@ header p {
 
 .error-section p {
     color: #666;
+}
+
+/* English highlight styling */
+.english-highlight {
+    background: linear-gradient(120deg, #ffecd2 0%, #fcb69f 100%);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-weight: 500;
+    cursor: help;
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+.english-highlight:hover {
+    background: linear-gradient(120deg, #ffd89b 0%, #19547b 100%);
+    color: white;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Custom tooltip styling - modern design */
+.custom-tooltip {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 10px 16px;
+    border-radius: 12px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    white-space: nowrap;
+    z-index: 1000;
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+    pointer-events: none;
+    animation: tooltipFadeIn 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+}
+
+@keyframes tooltipFadeIn {
+    from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(8px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0) scale(1);
+    }
 }
 
 @media (max-width: 600px) {

@@ -23,30 +23,8 @@ class AudioRecorder {
         document.addEventListener('keydown', (e) => this.handleKeyPress(e));
     }
 
-    initializeElements() {
-        this.recordBtn = document.getElementById('recordBtn');
-        this.stopBtn = document.getElementById('stopBtn');
-        this.statusDot = document.getElementById('statusDot');
-        this.statusText = document.getElementById('statusText');
-        this.timer = document.getElementById('timer');
-        this.currentLang = document.getElementById('currentLang');
-        this.resultsSection = document.getElementById('resultsSection');
-        this.processingStatus = document.getElementById('processingStatus');
-    }
-
-    bindEvents() {
-        this.recordBtn.addEventListener('click', () => this.startRecording());
-        this.stopBtn.addEventListener('click', () => this.stopRecording());
-        
-        // Spacebar event listener - single press to toggle English mode
-        document.addEventListener('keydown', (e) => {
-            if (e.code === 'Space' && this.isRecording) {
-                e.preventDefault();
-                this.toggleEnglishMode();
-            }
-        });
-    }
-
+    // ===== RECORDING METHODS =====
+    
     async startRecording() {
         try {
             const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -77,7 +55,6 @@ class AudioRecorder {
             this.updateUI();
             this.startTimer();
             
-            console.log('Recording started');
         } catch (error) {
             console.error('Error starting recording:', error);
             alert('Error accessing microphone. Please check permissions.');
@@ -96,16 +73,12 @@ class AudioRecorder {
             this.spans[this.spans.length - 1].end = finalTime;
         }
         
-        console.log('Final spans:', this.spans);
-        console.log('Coverage:', this.spans.reduce((total, span) => total + (span.end - span.start), 0), 'seconds');
-        
         this.updateUI();
         this.stopTimer();
-        
-        // Enable test button after recording
-        // this.testVerboseBtn.disabled = false; // Removed test button
     }
 
+    // ===== LANGUAGE TOGGLE METHODS =====
+    
     handleKeyPress(event) {
         if (event.code === 'Space' && this.isRecording) {
             event.preventDefault();
@@ -151,6 +124,8 @@ class AudioRecorder {
         this.updateUI();
     }
 
+    // ===== TIMER METHODS =====
+    
     getCurrentTime() {
         return (Date.now() - this.startTime) / 1000;
     }
@@ -175,6 +150,8 @@ class AudioRecorder {
         return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
     }
 
+    // ===== UI METHODS =====
+    
     updateUI() {
         // Update buttons
         this.recordBtn.disabled = this.isRecording;
@@ -219,6 +196,8 @@ class AudioRecorder {
         }
     }
 
+    // ===== PROCESSING METHODS =====
+    
     async processRecording() {
         this.resultsSection.style.display = 'block';
         this.processingStatus.textContent = 'Processing your recording...';
@@ -247,7 +226,6 @@ class AudioRecorder {
             
             // Display results
             this.displayResult(result);
-            console.log('Transcription response:', result);
             
         } catch (error) {
             console.error('Error processing recording:', error);
@@ -268,6 +246,9 @@ class AudioRecorder {
             return;
         }
         
+        // Create highlighted transcript with hover translations
+        const highlightedTranscript = this.createHighlightedTranscript(result.transcript, result.translations);
+        
         // Display transcript
         resultsHTML = `
             <div class="result-header">
@@ -275,7 +256,7 @@ class AudioRecorder {
             </div>
             
             <div class="transcript-section">
-                <div class="transcript-text">${result.transcript}</div>
+                <div class="transcript-text">${highlightedTranscript}</div>
             </div>
             
             <div class="info-section">
@@ -291,10 +272,137 @@ class AudioRecorder {
                     <span class="info-label">Segments:</span>
                     <span class="info-value">${result.segments_count}</span>
                 </div>
+                <div class="info-item">
+                    <span class="info-label">Translation time:</span>
+                    <span class="info-value">${result.translation_time ? result.translation_time.toFixed(2) : '0.00'}s</span>
+                </div>
             </div>
         `;
         
         this.processingStatus.innerHTML = resultsHTML;
+        
+        // Add event listeners for tooltips after rendering
+        this.setupTooltips();
+    }
+
+    // ===== TOOLTIP METHODS =====
+    
+    setupTooltips() {
+        const highlights = document.querySelectorAll('.english-highlight');
+        
+        highlights.forEach((highlight) => {
+            const translation = highlight.getAttribute('data-translation');
+            
+            highlight.addEventListener('mouseenter', () => {
+                this.showTooltip(highlight, translation);
+            });
+            
+            highlight.addEventListener('mouseleave', () => {
+                this.hideTooltip();
+            });
+        });
+    }
+
+    showTooltip(element, translation) {
+        // Remove any existing tooltip
+        this.hideTooltip();
+        
+        // Unescape HTML entities in the translation
+        const unescapedTranslation = translation
+            .replace(/&quot;/g, '"')
+            .replace(/&#39;/g, "'")
+            .replace(/&lt;/g, '<')
+            .replace(/&gt;/g, '>');
+        
+        // Create tooltip element
+        const tooltip = document.createElement('div');
+        tooltip.className = 'custom-tooltip';
+        tooltip.textContent = unescapedTranslation;
+        
+        // Position tooltip above the highlighted text
+        const rect = element.getBoundingClientRect();
+        tooltip.style.position = 'fixed';
+        tooltip.style.top = `${rect.top - 45}px`;
+        tooltip.style.left = `${rect.left + (rect.width / 2)}px`;
+        tooltip.style.transform = 'translateX(-50%)';
+        
+        document.body.appendChild(tooltip);
+    }
+
+    hideTooltip() {
+        const existingTooltip = document.querySelector('.custom-tooltip');
+        if (existingTooltip) {
+            existingTooltip.remove();
+        }
+    }
+
+    // ===== TRANSCRIPT PROCESSING METHODS =====
+    
+    createHighlightedTranscript(transcript, translations) {
+        if (!translations || translations.length === 0) {
+            return transcript;
+        }
+        
+        let highlightedText = transcript;
+        
+        // Replace each English segment with highlighted version
+        translations.forEach((translation) => {
+            const englishText = translation.english;  // Original text for display
+            const englishClean = translation.english_clean;  // Clean text for matching
+            const portugueseText = translation.portuguese;
+            
+            // Escape HTML attributes to prevent breaking the data-translation attribute
+            const escapedPortugueseText = portugueseText
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;');
+            
+            // Create highlighted span with custom tooltip
+            const highlightedSpan = `<span class="english-highlight" data-translation="${escapedPortugueseText}">${englishClean}</span>`;
+            
+            // Prioritize using clean text for matching since that's what grammar correction produces
+            let replaced = false;
+            
+            // First try: Use clean text for matching (this should work with grammar-corrected transcript)
+            if (englishClean) {
+                // Remove quotes from clean text for matching if they exist
+                const cleanTextForMatching = englishClean.replace(/^["']|["']$/g, '').trim();
+                
+                // Create case-insensitive regex for matching
+                const cleanTextRegex = new RegExp(cleanTextForMatching.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
+                const match = highlightedText.match(cleanTextRegex);
+                
+                if (match) {
+                    // Use the actual matched text (preserving case from transcript) for the span content
+                    const actualMatchedText = match[0];
+                    const highlightedSpanWithActualText = `<span class="english-highlight" data-translation="${escapedPortugueseText}">${actualMatchedText}</span>`;
+                    
+                    highlightedText = highlightedText.replace(cleanTextRegex, highlightedSpanWithActualText);
+                    replaced = true;
+                }
+            }
+            
+            // Second try: Use original text if clean text didn't work
+            if (!replaced && englishText) {
+                // Remove quotes from original text for matching if they exist
+                const originalTextForMatching = englishText.replace(/^["']|["']$/g, '').trim();
+                
+                // Create case-insensitive regex for matching
+                const originalTextRegex = new RegExp(originalTextForMatching.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
+                const match = highlightedText.match(originalTextRegex);
+                
+                if (match) {
+                    // Use the actual matched text (preserving case from transcript) for the span content
+                    const actualMatchedText = match[0];
+                    const highlightedSpanWithActualText = `<span class="english-highlight" data-translation="${escapedPortugueseText}">${actualMatchedText}</span>`;
+                    
+                    highlightedText = highlightedText.replace(originalTextRegex, highlightedSpanWithActualText);
+                }
+            }
+        });
+        
+        return highlightedText;
     }
 }
 

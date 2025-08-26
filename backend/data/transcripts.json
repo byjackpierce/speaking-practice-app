@@ -38,5 +38,748 @@
       3.464931011199951,
       2.157102108001709
     ]
+  },
+  {
+    "timestamp": "2025-08-25T11:17:33.537035",
+    "duration": 9.739,
+    "transcript": "Ok, eu quero ver se t\u00e1 funcionando just like I wanted it to. I hope that est\u00e1 funcionando.",
+    "raw_transcript": "Ok, eu quero ver se t\u00e1 funcionando. just like I wanted it to. I hope that... Est\u00e1 funcionando.",
+    "spans_count": 3,
+    "segments_count": 3,
+    "total_time": 12.01309609413147,
+    "parsing_time": 0.050683021545410156,
+    "file_setup_time": 0.0008933544158935547,
+    "audio_loading_time": 1.3877198696136475,
+    "segmentation_time": 1.4066696166992188e-05,
+    "transcription_time": 7.919648170471191,
+    "grammar_correction_time": 2.6538782119750977,
+    "segment_timings": [
+      2.901771068572998,
+      3.3803939819335938,
+      1.6345100402832031
+    ]
+  },
+  {
+    "timestamp": "2025-08-25T11:20:41.521788",
+    "duration": 11.001,
+    "transcript": "\"Vamos fazer outra prova. Let's see if the English translation works. Est\u00e1 funcionando, espero que it works well. Mas, vamos saber.\"",
+    "raw_transcript": "Vamos fazer outra prova. Let's see if the English translation works. Est\u00e1 funcionando, espero que... It works well Mas, vamos saber.",
+    "spans_count": 5,
+    "segments_count": 5,
+    "total_time": 17.67932105064392,
+    "parsing_time": 0.04921078681945801,
+    "file_setup_time": 0.0006272792816162109,
+    "audio_loading_time": 1.2139647006988525,
+    "segmentation_time": 1.4066696166992188e-05,
+    "transcription_time": 11.079693794250488,
+    "grammar_correction_time": 1.1910531520843506,
+    "segment_timings": [
+      3.4140727519989014,
+      2.5762128829956055,
+      2.271242141723633,
+      0.8149549961090088,
+      1.9995388984680176
+    ]
+  },
+  {
+    "timestamp": "2025-08-25T11:23:41.995339",
+    "duration": 15.813,
+    "transcript": "\"Quero ver se est\u00e1 funcionando. I want it. Espero que sim, mas a gente have to use it to see. Sempre \u00e9 assim, n\u00e9?\"",
+    "raw_transcript": "Quero ver se est\u00e1 funcionando. I want it Espero que sim, mas a gente... have to use it to see Sempre \u00e9 assim, n\u00e9?",
+    "spans_count": 5,
+    "segments_count": 5,
+    "total_time": 21.852293968200684,
+    "parsing_time": 0.035310983657836914,
+    "file_setup_time": 0.0005750656127929688,
+    "audio_loading_time": 0.14826393127441406,
+    "segmentation_time": 1.9073486328125e-05,
+    "transcription_time": 14.806056022644043,
+    "grammar_correction_time": 1.5788640975952148,
+    "segment_timings": [
+      3.066154956817627,
+      2.178407907485962,
+      2.2953410148620605,
+      4.862212896347046,
+      2.400740146636963
+    ]
+  },
+  {
+    "timestamp": "2025-08-25T11:26:33.422632",
+    "duration": 13.841,
+    "transcript": "\"Espero que t\u00e1 funcionando. A gente tem que ir. Use it to find out. Sempre \u00e9 assim na vida, a gente tem que procurar a solution e prov\u00e1-lo.\"",
+    "raw_transcript": "Espero que t\u00e1 funcionando. A gente tem que ir... Use it to find out. Sempre \u00e9 assim na vida, a gente tem que procurar... solution e prov\u00e1-lo.",
+    "spans_count": 5,
+    "segments_count": 5,
+    "total_time": 13.698997974395752,
+    "parsing_time": 0.02051687240600586,
+    "file_setup_time": 0.0005090236663818359,
+    "audio_loading_time": 0.13708901405334473,
+    "segmentation_time": 2.4080276489257812e-05,
+    "transcription_time": 11.14015007019043,
+    "grammar_correction_time": 0.8908300399780273,
+    "segment_timings": [
+      2.7900049686431885,
+      1.5354490280151367,
+      3.2940499782562256,
+      2.479137897491455,
+      1.038421869277954
+    ]
+  },
+  {
+    "timestamp": "2025-08-25T11:31:20.972155",
+    "duration": 18.511,
+    "transcript": "Hoje t\u00e1 chovendo e eu quero go out for a walk. Mas n\u00e3o d\u00e1. Eu acho que \u00e9 uma pena, porque eu queria muito get to know my neighborhood um pouco melhor.",
+    "raw_transcript": "Hoje t\u00e1 chovendo e eu quero... Go out for a walk Mas n\u00e3o d\u00e1. Eu acho que \u00e9 uma pena, porque eu queria muito... get to know my neighborhood. um pouco melhor",
+    "spans_count": 5,
+    "segments_count": 5,
+    "total_time": 19.99400782585144,
+    "parsing_time": 0.05571103096008301,
+    "file_setup_time": 0.0008008480072021484,
+    "audio_loading_time": 1.3958230018615723,
+    "segmentation_time": 1.811981201171875e-05,
+    "transcription_time": 13.935202836990356,
+    "grammar_correction_time": 1.271665096282959,
+    "segment_timings": [
+      3.797858953475952,
+      2.1727049350738525,
+      4.118525981903076,
+      1.9157321453094482,
+      1.9283878803253174
+    ]
+  },
+  {
+    "timestamp": "2025-08-25T11:52:20.976437",
+    "duration": 14.076,
+    "transcript": "Today it's raining... But I wanted to go out for a walk. Mas eu acho que n\u00e3o... So, it's not possible. \u00c9 uma pena.",
+    "raw_transcript": "Hoje t\u00e1 chovendo... But I wanted to go out for a walk. Mas eu acho que n\u00e3o... So, it's not possible. \u00c9 uma pena.",
+    "spans_count": 5,
+    "segments_count": 5,
+    "total_time": 15.412834882736206,
+    "parsing_time": 0.048384904861450195,
+    "file_setup_time": 0.0006930828094482422,
+    "audio_loading_time": 1.3823399543762207,
+    "segmentation_time": 1.5974044799804688e-05,
+    "transcription_time": 10.082229852676392,
+    "grammar_correction_time": 1.3413238525390625,
+    "segment_timings": [
+      2.927928924560547,
+      1.5224010944366455,
+      2.098221778869629,
+      1.3748550415039062,
+      2.1546099185943604
+    ]
+  },
+  {
+    "timestamp": "2025-08-25T11:54:33.705627",
+    "duration": 20.198,
+    "transcript": "\"Today it's raining, but I wanted to go out for a walk. So I think I'll have to go out with my coat because otherwise I'll get wet. You know?\"",
+    "raw_transcript": "Hoje t\u00e1 chovendo, mas eu queria... Go out for a walk. Ent\u00e3o acho que eu vou ter que sair com a minha... coat porque sen\u00e3o eu vou... get wet. Sabe?",
+    "spans_count": 7,
+    "segments_count": 7,
+    "total_time": 24.574921131134033,
+    "parsing_time": 0.030369043350219727,
+    "file_setup_time": 0.00038313865661621094,
+    "audio_loading_time": 0.16193389892578125,
+    "segmentation_time": 2.002716064453125e-05,
+    "transcription_time": 20.46532678604126,
+    "grammar_correction_time": 0.9777781963348389,
+    "segment_timings": [
+      3.3617820739746094,
+      1.4381330013275146,
+      3.792212963104248,
+      2.4485881328582764,
+      4.196717023849487,
+      3.064781904220581,
+      2.1587162017822266
+    ]
+  },
+  {
+    "timestamp": "2025-08-25T11:56:57.923525",
+    "duration": 18.873,
+    "transcript": "\"Ontem, eu falava com um amigo meu on my phone enquanto dava uma volta. Mas logo it started to rain. Ent\u00e3o, eu voltei para casa.\"",
+    "raw_transcript": "Ontem, eu falava com um amigo meu... on my phone. Mientras que eu dava uma volta. Mas logo... It started to rain Ent\u00e3o, eu voltei para casa.",
+    "spans_count": 5,
+    "segments_count": 5,
+    "total_time": 15.617130994796753,
+    "parsing_time": 0.03529095649719238,
+    "file_setup_time": 0.0010547637939453125,
+    "audio_loading_time": 0.1695079803466797,
+    "segmentation_time": 1.9073486328125e-05,
+    "transcription_time": 12.79328203201294,
+    "grammar_correction_time": 1.1819891929626465,
+    "segment_timings": [
+      2.40179705619812,
+      2.913412094116211,
+      3.3550729751586914,
+      1.9734559059143066,
+      2.147664785385132
+    ]
+  },
+  {
+    "timestamp": "2025-08-25T12:04:27.347768",
+    "duration": 19.111,
+    "transcript": "\"When I was also talking to a friend of mine on my phone. But soon I wanted to go out, to take a walk, but it was raining. So, I couldn't...\"",
+    "raw_transcript": "Quando tamb\u00e9m eu falava com um amigo meu... on my phone. Mas logo eu queria sair, para dar uma volta, mas... it was raining. Ent\u00e3o, no podia...",
+    "spans_count": 5,
+    "segments_count": 5,
+    "total_time": 19.877689123153687,
+    "parsing_time": 0.04345440864562988,
+    "file_setup_time": 0.0007028579711914062,
+    "audio_loading_time": 1.4199481010437012,
+    "segmentation_time": 1.0967254638671875e-05,
+    "transcription_time": 15.320786714553833,
+    "grammar_correction_time": 0.9842031002044678,
+    "segment_timings": [
+      5.590490102767944,
+      2.300122022628784,
+      3.8376078605651855,
+      1.7062368392944336,
+      1.8824210166931152
+    ]
+  },
+  {
+    "timestamp": "2025-08-25T12:08:00.737176",
+    "duration": 17.699,
+    "transcript": "Also, I wanted to go for a walk. But it was raining, so I stayed home and called a friend. We talked for a long time.",
+    "raw_transcript": "tamb\u00e9m eu queria sair Go for a walk. Mas tava chovendo, ent\u00e3o eu fiquei em casa e... I called a friend. A gente falou bastante tempo.",
+    "spans_count": 5,
+    "segments_count": 5,
+    "total_time": 16.74223303794861,
+    "parsing_time": 0.042411088943481445,
+    "file_setup_time": 0.0009000301361083984,
+    "audio_loading_time": 1.375349998474121,
+    "segmentation_time": 1.3828277587890625e-05,
+    "transcription_time": 12.463538885116577,
+    "grammar_correction_time": 0.9939310550689697,
+    "segment_timings": [
+      3.593183994293213,
+      2.51308536529541,
+      2.6853370666503906,
+      1.7115278244018555,
+      1.9573478698730469
+    ]
+  },
+  {
+    "timestamp": "2025-08-25T12:14:33.015651",
+    "duration": 14.467,
+    "transcript": "",
+    "raw_transcript": "Eu queria sair pra dar uma volta, mas tava... It's raining outside. Ent\u00e3o eu decidi, fiquei na casa, eu chamei... a friend of mine. A gente ficou falando bastante tempo.",
+    "spans_count": 5,
+    "segments_count": 5,
+    "total_time": 19.033854961395264,
+    "parsing_time": 0.054116249084472656,
+    "file_setup_time": 0.0011708736419677734,
+    "audio_loading_time": 1.128490924835205,
+    "segmentation_time": 1.9311904907226562e-05,
+    "transcription_time": 9.695689916610718,
+    "grammar_correction_time": 5.5691001415252686,
+    "segment_timings": [
+      2.31730580329895,
+      2.8873560428619385,
+      1.6761200428009033,
+      1.4155230522155762,
+      1.3949840068817139
+    ]
+  },
+  {
+    "timestamp": "2025-08-25T12:17:33.996193",
+    "duration": 12.278,
+    "transcript": "\"Ok, eu quero fazer uma nova Twist. Espero que esteja funcionando Just like I wanted it to. Espero que sim.\"",
+    "raw_transcript": "Ok, eu quero fazer uma nova... Twist. para ver se est\u00e1 funcionando Just like I wanted it to Espero que sim.",
+    "spans_count": 5,
+    "segments_count": 5,
+    "total_time": 18.007696866989136,
+    "parsing_time": 0.05487227439880371,
+    "file_setup_time": 0.0010609626770019531,
+    "audio_loading_time": 1.375581979751587,
+    "segmentation_time": 1.5974044799804688e-05,
+    "transcription_time": 12.276348114013672,
+    "grammar_correction_time": 2.0503931045532227,
+    "segment_timings": [
+      3.267023801803589,
+      3.9972610473632812,
+      1.5496408939361572,
+      1.3052499294281006,
+      2.1535727977752686
+    ]
+  },
+  {
+    "timestamp": "2025-08-26T07:17:10.937526",
+    "duration": 13.74,
+    "transcript": "\"Eu quero fazer um novo teste. Espero que esteja funcionando, just like I wanted it to. Espero que sim.\"",
+    "raw_transcript": "Eu quero fazer uma nova... test Espero que esteja funcionando. just like I wanted it to. Espero que sim.",
+    "spans_count": 5,
+    "segments_count": 5,
+    "total_time": 27.61102795600891,
+    "parsing_time": 0.05498385429382324,
+    "file_setup_time": 0.0008130073547363281,
+    "audio_loading_time": 2.2476980686187744,
+    "segmentation_time": 2.09808349609375e-05,
+    "transcription_time": 18.133018970489502,
+    "grammar_correction_time": 2.689784049987793,
+    "segment_timings": [
+      7.553405046463013,
+      2.141227960586548,
+      3.4821619987487793,
+      2.783996105194092,
+      2.1696178913116455
+    ],
+    "english_segments": [
+      {
+        "text": "test",
+        "clean_text": "test",
+        "start_time": 3.561,
+        "end_time": 5.287
+      },
+      {
+        "text": "just like I wanted it to.",
+        "clean_text": "just like I wanted it to",
+        "start_time": 8.443,
+        "end_time": 11.108
+      }
+    ],
+    "translations": [
+      {
+        "english": "test",
+        "english_clean": "test",
+        "portuguese": "\"teste\"",
+        "start_time": 3.561,
+        "end_time": 5.287
+      },
+      {
+        "english": "just like I wanted it to.",
+        "english_clean": "just like I wanted it to",
+        "portuguese": "\"exatamente como eu queria.\"",
+        "start_time": 8.443,
+        "end_time": 11.108
+      }
+    ],
+    "corrected_transcript": "\"Eu quero fazer um novo teste. Espero que esteja funcionando, just like I wanted it to. Espero que sim.\""
+  },
+  {
+    "timestamp": "2025-08-26T07:24:00.037993",
+    "duration": 16.303,
+    "transcript": "\"Vamos fazer um novo test. Espero que esteja funcionando como eu queria. Acho que it should be.\"",
+    "raw_transcript": "Vamos fazer uma nova... test Espero que esteja funcionando como eu queria. Acho que... It should be",
+    "spans_count": 4,
+    "segments_count": 4,
+    "total_time": 21.394471883773804,
+    "parsing_time": 0.05518794059753418,
+    "file_setup_time": 0.0010182857513427734,
+    "audio_loading_time": 1.8241257667541504,
+    "segmentation_time": 1.8835067749023438e-05,
+    "transcription_time": 13.025670051574707,
+    "grammar_correction_time": 1.3927459716796875,
+    "segment_timings": [
+      4.322672128677368,
+      2.557487964630127,
+      3.4797728061676025,
+      2.663651943206787
+    ],
+    "english_segments": [
+      {
+        "text": "test",
+        "clean_text": "test",
+        "start_time": 2.403,
+        "end_time": 4.243
+      },
+      {
+        "text": "It should be",
+        "clean_text": "It should be",
+        "start_time": 13.465,
+        "end_time": 16.297
+      }
+    ],
+    "translations": [
+      {
+        "english": "test",
+        "english_clean": "test",
+        "portuguese": "\"teste\"",
+        "start_time": 2.403,
+        "end_time": 4.243
+      },
+      {
+        "english": "It should be",
+        "english_clean": "It should be",
+        "portuguese": "\"Deveria ser\"",
+        "start_time": 13.465,
+        "end_time": 16.297
+      }
+    ],
+    "corrected_transcript": "\"Vamos fazer um novo test. Espero que esteja funcionando como eu queria. Acho que it should be.\""
+  },
+  {
+    "timestamp": "2025-08-26T07:28:50.422779",
+    "duration": 25.813,
+    "transcript": "\"Hoje eu quero sair do meu AirBnb porque eu estou changing Airbnb. Eu vou ficar em um outro lugar. Acho que eu vou ficar l\u00e1 six days at most.\"",
+    "raw_transcript": "Hoje eu quero sair do meu AirBnb porque eu t\u00f4... changing Airbnb Eu vou ficar em um outro lugar. Acho que eu vou ficar l\u00e1... six days at most.",
+    "spans_count": 4,
+    "segments_count": 4,
+    "total_time": 28.921436309814453,
+    "parsing_time": 0.031652212142944336,
+    "file_setup_time": 0.0004899501800537109,
+    "audio_loading_time": 0.21522116661071777,
+    "segmentation_time": 1.6689300537109375e-05,
+    "transcription_time": 22.47557806968689,
+    "grammar_correction_time": 3.3811020851135254,
+    "segment_timings": [
+      4.61756706237793,
+      10.35542893409729,
+      4.368425130844116,
+      3.13140606880188
+    ],
+    "english_segments": [
+      {
+        "text": "changing Airbnb",
+        "clean_text": "changing Airbnb",
+        "start_time": 8.991,
+        "end_time": 11.617
+      },
+      {
+        "text": "six days at most.",
+        "clean_text": "six days at most",
+        "start_time": 21.644,
+        "end_time": 25.807
+      }
+    ],
+    "translations": [
+      {
+        "english": "changing Airbnb",
+        "english_clean": "changing Airbnb",
+        "portuguese": "\"mudando Airbnb\"",
+        "start_time": 8.991,
+        "end_time": 11.617
+      },
+      {
+        "english": "six days at most.",
+        "english_clean": "six days at most",
+        "portuguese": "\"no m\u00e1ximo seis dias.\"",
+        "start_time": 21.644,
+        "end_time": 25.807
+      }
+    ],
+    "corrected_transcript": "\"Hoje eu quero sair do meu AirBnb porque eu estou changing Airbnb. Eu vou ficar em um outro lugar. Acho que eu vou ficar l\u00e1 six days at most.\""
+  },
+  {
+    "timestamp": "2025-08-26T07:39:22.575149",
+    "duration": 16.596,
+    "transcript": "\"Hoje eu tenho que sair do meu AirBnB at 12 o'clock e logo vou mudar para ficar no outro mp for six days at most.\"",
+    "raw_transcript": "Hoje eu tenho que sair do meu AirBnB. at 12 o'clock. e logo eu vou mudar para ficar no outro mp six days at most.",
+    "spans_count": 4,
+    "segments_count": 4,
+    "total_time": 22.8305881023407,
+    "parsing_time": 0.05217623710632324,
+    "file_setup_time": 0.0010178089141845703,
+    "audio_loading_time": 1.5623300075531006,
+    "segmentation_time": 1.7881393432617188e-05,
+    "transcription_time": 15.70596694946289,
+    "grammar_correction_time": 2.4778690338134766,
+    "segment_timings": [
+      4.182435035705566,
+      3.014050006866455,
+      5.620452165603638,
+      2.885906934738159
+    ],
+    "english_segments": [
+      {
+        "text": "at 12 o'clock.",
+        "clean_text": "at 12 o'clock",
+        "start_time": 4.887,
+        "end_time": 7.975
+      },
+      {
+        "text": "six days at most.",
+        "clean_text": "six days at most",
+        "start_time": 13.497,
+        "end_time": 16.591
+      }
+    ],
+    "translations": [
+      {
+        "english": "at 12 o'clock.",
+        "english_clean": "at 12 o'clock",
+        "portuguese": "\"\u00e0s 12 horas.\"",
+        "start_time": 4.887,
+        "end_time": 7.975
+      },
+      {
+        "english": "six days at most.",
+        "english_clean": "six days at most",
+        "portuguese": "\"no m\u00e1ximo seis dias.\"",
+        "start_time": 13.497,
+        "end_time": 16.591
+      }
+    ],
+    "corrected_transcript": "\"Hoje eu tenho que sair do meu AirBnB at 12 o'clock e logo vou mudar para ficar no outro mp for six days at most.\""
+  },
+  {
+    "timestamp": "2025-08-26T07:44:02.962659",
+    "duration": 19.137,
+    "transcript": "Eu quero fazer uma prova para dar uma olhada. To the output, acho que tem algo que t\u00e1 dando ruim because it's including lots of punctuation marks.",
+    "raw_transcript": "Eu quero fazer uma prova, para dar uma olhada. to the output Acho que tem algo que t\u00e1 dando ruim. Because it's including lots of punctuation marks",
+    "spans_count": 4,
+    "segments_count": 4,
+    "total_time": 17.955713987350464,
+    "parsing_time": 0.04896211624145508,
+    "file_setup_time": 0.0008859634399414062,
+    "audio_loading_time": 1.6669549942016602,
+    "segmentation_time": 1.7881393432617188e-05,
+    "transcription_time": 11.32532811164856,
+    "grammar_correction_time": 2.2532100677490234,
+    "segment_timings": [
+      4.7182512283325195,
+      1.3788938522338867,
+      3.0617549419403076,
+      2.1640608310699463
+    ],
+    "english_segments": [
+      {
+        "text": "to the output",
+        "clean_text": "to the output",
+        "start_time": 6.419,
+        "end_time": 8.479
+      },
+      {
+        "text": "Because it's including lots of punctuation marks",
+        "clean_text": "Because it's including lots of punctuation marks",
+        "start_time": 15.443,
+        "end_time": 19.119
+      }
+    ],
+    "translations": [
+      {
+        "english": "to the output",
+        "english_clean": "to the output",
+        "portuguese": "para a sa\u00edda",
+        "start_time": 6.419,
+        "end_time": 8.479
+      },
+      {
+        "english": "Because it's including lots of punctuation marks",
+        "english_clean": "Because it's including lots of punctuation marks",
+        "portuguese": "Porque est\u00e1 incluindo muitos sinais de pontua\u00e7\u00e3o",
+        "start_time": 15.443,
+        "end_time": 19.119
+      }
+    ],
+    "corrected_transcript": "Eu quero fazer uma prova para dar uma olhada. To the output, acho que tem algo que t\u00e1 dando ruim because it's including lots of punctuation marks."
+  },
+  {
+    "timestamp": "2025-08-26T07:47:46.721023",
+    "duration": 18.025,
+    "transcript": "\"Quero fazer uma prova para dar uma olhada. To the output, acho que algo t\u00e1 dando ruim porque it keeps adding punctuation marks.\"",
+    "raw_transcript": "Quero fazer uma prova para dar uma olhada. to the output. acho que algo t\u00e1 dando ruim porque It keeps adding punctuation marks.",
+    "spans_count": 4,
+    "segments_count": 4,
+    "total_time": 18.47958278656006,
+    "parsing_time": 0.031546831130981445,
+    "file_setup_time": 0.0004210472106933594,
+    "audio_loading_time": 0.1897728443145752,
+    "segmentation_time": 1.621246337890625e-05,
+    "transcription_time": 12.677207946777344,
+    "grammar_correction_time": 2.2593319416046143,
+    "segment_timings": [
+      3.6140527725219727,
+      2.1799659729003906,
+      3.957875967025757,
+      2.922476053237915
+    ],
+    "english_segments": [
+      {
+        "text": "to the output.",
+        "clean_text": "to the output",
+        "start_time": 4.155,
+        "end_time": 6.199
+      },
+      {
+        "text": "It keeps adding punctuation marks.",
+        "clean_text": "It keeps adding punctuation marks",
+        "start_time": 14.349,
+        "end_time": 18.014
+      }
+    ],
+    "translations": [
+      {
+        "english": "to the output.",
+        "english_clean": "to the output",
+        "portuguese": "para a sa\u00edda",
+        "start_time": 4.155,
+        "end_time": 6.199
+      },
+      {
+        "english": "It keeps adding punctuation marks.",
+        "english_clean": "It keeps adding punctuation marks",
+        "portuguese": "Continua adicionando sinais de pontua\u00e7\u00e3o",
+        "start_time": 14.349,
+        "end_time": 18.014
+      }
+    ],
+    "corrected_transcript": "\"Quero fazer uma prova para dar uma olhada. To the output, acho que algo t\u00e1 dando ruim porque it keeps adding punctuation marks.\""
+  },
+  {
+    "timestamp": "2025-08-26T07:49:42.048762",
+    "duration": 17.011,
+    "transcript": "Acho que hoje vai chover, which is a shame porque eu queria sair e dar uma volta. Also, I'm changing my Airbnb. Hoje, vou ficar em outro lugar.",
+    "raw_transcript": "Acho que hoje vai chover. Which is a shame porque eu queria sair e dar uma volta. Also, I'm changing my Airbnb. Hoje, eu vou ficar em outro lugar.",
+    "spans_count": 5,
+    "segments_count": 5,
+    "total_time": 17.869418144226074,
+    "parsing_time": 0.03082108497619629,
+    "file_setup_time": 0.0012118816375732422,
+    "audio_loading_time": 0.11280012130737305,
+    "segmentation_time": 3.504753112792969e-05,
+    "transcription_time": 11.984861850738525,
+    "grammar_correction_time": 2.052435874938965,
+    "segment_timings": [
+      3.671670913696289,
+      2.0462241172790527,
+      2.353623867034912,
+      2.7651567459106445,
+      1.145064115524292
+    ],
+    "english_segments": [
+      {
+        "text": "Which is a shame",
+        "clean_text": "Which is a shame",
+        "start_time": 3.775,
+        "end_time": 5.074
+      },
+      {
+        "text": "Also, I'm changing my Airbnb.",
+        "clean_text": "Also, I'm changing my Airbnb",
+        "start_time": 9.112,
+        "end_time": 13.877
+      }
+    ],
+    "translations": [
+      {
+        "english": "Which is a shame",
+        "english_clean": "Which is a shame",
+        "portuguese": "Qual \u00e9 uma pena",
+        "start_time": 3.775,
+        "end_time": 5.074
+      },
+      {
+        "english": "Also, I'm changing my Airbnb.",
+        "english_clean": "Also, I'm changing my Airbnb",
+        "portuguese": "Al\u00e9m disso estou mudando meu Airbnb",
+        "start_time": 9.112,
+        "end_time": 13.877
+      }
+    ],
+    "corrected_transcript": "Acho que hoje vai chover, which is a shame porque eu queria sair e dar uma volta. Also, I'm changing my Airbnb. Hoje, vou ficar em outro lugar."
+  },
+  {
+    "timestamp": "2025-08-26T07:53:34.050663",
+    "duration": 64.471,
+    "transcript": "Ent\u00e3o, eu quero falar um pouco de Florian\u00f3polis, que acho que \u00e9 daqui. Cheguei aqui faz quase duas semanas e, at\u00e9 agora, the weather has been a little bit bad. Half of the days have been sunny e outros have been cloudy. Mas ainda gostei daqui porque acho muito tranquilo. Obrigado. Tchau, tchau. Um beijo e um abra\u00e7o. Xuxa!",
+    "raw_transcript": "Ent\u00e3o, eu quero falar um pouco do Florian\u00f3polis, que \u00e9 acho daqui, ent\u00e3o eu cheguei aqui faz quase duas semanas, e at\u00e9 agora... the weather Obrigado.  has been Tchau, tchau. A little bit bad. Um beijo e um abra\u00e7o. half of the days Xuxa! have been sunny. E outro... who have been cloudy. Mas ainda eu gostei daqui porque eu acho muito tranquilo.",
+    "spans_count": 13,
+    "segments_count": 13,
+    "total_time": 48.405505895614624,
+    "parsing_time": 0.030386924743652344,
+    "file_setup_time": 0.00125885009765625,
+    "audio_loading_time": 0.2854301929473877,
+    "segmentation_time": 3.600120544433594e-05,
+    "transcription_time": 36.235350131988525,
+    "grammar_correction_time": 3.8670408725738525,
+    "segment_timings": [
+      7.83740496635437,
+      1.2543299198150635,
+      1.843705177307129,
+      1.845271110534668,
+      1.945673942565918,
+      3.0915589332580566,
+      2.3158230781555176,
+      2.1699230670928955,
+      3.380366086959839,
+      1.4300241470336914,
+      1.9450840950012207,
+      2.1499438285827637,
+      5.0179383754730225
+    ],
+    "english_segments": [
+      {
+        "text": "the weather",
+        "clean_text": "the weather",
+        "start_time": 23.118,
+        "end_time": 24.466
+      },
+      {
+        "text": "has been",
+        "clean_text": "has been",
+        "start_time": 25.719,
+        "end_time": 26.949
+      },
+      {
+        "text": "A little bit bad.",
+        "clean_text": "A little bit bad",
+        "start_time": 31.37,
+        "end_time": 33.486
+      },
+      {
+        "text": "half of the days",
+        "clean_text": "half of the days",
+        "start_time": 36.138,
+        "end_time": 38.02
+      },
+      {
+        "text": "have been sunny.",
+        "clean_text": "have been sunny",
+        "start_time": 39.327,
+        "end_time": 41.625
+      },
+      {
+        "text": "who have been cloudy.",
+        "clean_text": "who have been cloudy",
+        "start_time": 45.694,
+        "end_time": 48.602
+      }
+    ],
+    "translations": [
+      {
+        "english": "the weather",
+        "english_clean": "the weather",
+        "portuguese": "o tempo",
+        "start_time": 23.118,
+        "end_time": 24.466
+      },
+      {
+        "english": "has been",
+        "english_clean": "has been",
+        "portuguese": "tem sido",
+        "start_time": 25.719,
+        "end_time": 26.949
+      },
+      {
+        "english": "A little bit bad.",
+        "english_clean": "A little bit bad",
+        "portuguese": "Um pouco ruim",
+        "start_time": 31.37,
+        "end_time": 33.486
+      },
+      {
+        "english": "half of the days",
+        "english_clean": "half of the days",
+        "portuguese": "metade dos dias",
+        "start_time": 36.138,
+        "end_time": 38.02
+      },
+      {
+        "english": "have been sunny.",
+        "english_clean": "have been sunny",
+        "portuguese": "tem estado ensolarado",
+        "start_time": 39.327,
+        "end_time": 41.625
+      },
+      {
+        "english": "who have been cloudy.",
+        "english_clean": "who have been cloudy",
+        "portuguese": "quem tem estado nublado",
+        "start_time": 45.694,
+        "end_time": 48.602
+      }
+    ],
+    "corrected_transcript": "Ent\u00e3o, eu quero falar um pouco de Florian\u00f3polis, que acho que \u00e9 daqui. Cheguei aqui faz quase duas semanas e, at\u00e9 agora, the weather has been a little bit bad. Half of the days have been sunny e outros have been cloudy. Mas ainda gostei daqui porque acho muito tranquilo. Obrigado. Tchau, tchau. Um beijo e um abra\u00e7o. Xuxa!"
   }
 ]
