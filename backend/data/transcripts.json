@@ -781,5 +781,407 @@
       }
     ],
     "corrected_transcript": "Ent\u00e3o, eu quero falar um pouco de Florian\u00f3polis, que acho que \u00e9 daqui. Cheguei aqui faz quase duas semanas e, at\u00e9 agora, the weather has been a little bit bad. Half of the days have been sunny e outros have been cloudy. Mas ainda gostei daqui porque acho muito tranquilo. Obrigado. Tchau, tchau. Um beijo e um abra\u00e7o. Xuxa!"
+  },
+  {
+    "timestamp": "2025-08-27T10:40:30.692028",
+    "transcript": "\"Ent\u00e3o eu t\u00f4 aqui no outro egg do Bi, n\u00e3o \u00e9 t\u00e3o nice, like the last one, em que eu tava ficando, mas tudo bem. Hoje tem chuva e acho que it's going to last all day, mais se tem um breaking the rain, eu vou sair para dar uma caminhada.\"",
+    "raw_transcript": "ent\u00e3o eu t\u00f4 aqui no outro egg do Bi, n\u00e3o \u00e9 t\u00e3o... Nice, like the last one. em que eu tava ficando, mas tudo bem. Hoje tem chuva e acho que... It's going to last all day. mais... se tem um... Breaking the rain. Eu vou sair para dar uma caminhada.",
+    "corrected_transcript": "\"Ent\u00e3o eu t\u00f4 aqui no outro egg do Bi, n\u00e3o \u00e9 t\u00e3o nice, like the last one, em que eu tava ficando, mas tudo bem. Hoje tem chuva e acho que it's going to last all day, mais se tem um breaking the rain, eu vou sair para dar uma caminhada.\"",
+    "full_transcript": "ent\u00e3o eu t\u00f4 aqui no outro egg do Bi, n\u00e3o \u00e9 t\u00e3o... Nice, like the last one. em que eu tava ficando, mas tudo bem. Hoje tem chuva e acho que... It's going to last all day. mais... se tem um... Breaking the rain. Eu vou sair para dar uma caminhada.",
+    "english_segments": [
+      {
+        "text": "Nice, like the last one.",
+        "clean_text": "Nice, like the last one",
+        "start_time": 7.252,
+        "end_time": 15.659
+      },
+      {
+        "text": "It's going to last all day.",
+        "clean_text": "It's going to last all day",
+        "start_time": 25.65,
+        "end_time": 27.503
+      },
+      {
+        "text": "Breaking the rain.",
+        "clean_text": "Breaking the rain",
+        "start_time": 31.589,
+        "end_time": 33.139
+      }
+    ],
+    "translations": [
+      {
+        "english": "Nice, like the last one.",
+        "english_clean": "Nice, like the last one",
+        "portuguese": "Bom como o \u00faltimo",
+        "start_time": 7.252,
+        "end_time": 15.659
+      },
+      {
+        "english": "It's going to last all day.",
+        "english_clean": "It's going to last all day",
+        "portuguese": "Vai durar o dia todo",
+        "start_time": 25.65,
+        "end_time": 27.503
+      },
+      {
+        "english": "Breaking the rain.",
+        "english_clean": "Breaking the rain",
+        "portuguese": "Quebrando a chuva",
+        "start_time": 31.589,
+        "end_time": 33.139
+      }
+    ],
+    "duration": 35.875,
+    "spans_count": 7,
+    "segments_count": 7,
+    "total_time": 31.63180112838745,
+    "parsing_time": 0.06302523612976074,
+    "file_setup_time": 0.0009458065032958984,
+    "audio_loading_time": 4.128124713897705,
+    "segmentation_time": 2.6226043701171875e-05,
+    "transcription_time": 19.86208415031433,
+    "translation_time": 3.6801648139953613,
+    "grammar_correction_time": 3.897212266921997,
+    "segment_timings": [
+      3.892677068710327,
+      2.764260768890381,
+      4.706938982009888,
+      2.3362298011779785,
+      2.159939765930176,
+      2.5655558109283447,
+      1.4338221549987793
+    ]
+  },
+  {
+    "timestamp": "2025-08-27T11:05:13.822343",
+    "transcript": "\"Eu quero saber se est\u00e1 working corretamente como eu queria. Today is raining. Mas acho que pela tarde, It might stop. E logo eu vou ser capaz de sair and go for a walk.\"",
+    "raw_transcript": "Eu quero saber se est\u00e1... working corretamente como eu queria Today is raining. Mas acho que pela tarde... It might stop. E logo eu vou ser capaz de sair. and go for a walk.",
+    "corrected_transcript": "\"Eu quero saber se est\u00e1 working corretamente como eu queria. Today is raining. Mas acho que pela tarde, It might stop. E logo eu vou ser capaz de sair and go for a walk.\"",
+    "full_transcript": "Eu quero saber se est\u00e1... working corretamente como eu queria Today is raining. Mas acho que pela tarde... It might stop. E logo eu vou ser capaz de sair. and go for a walk.",
+    "english_segments": [
+      {
+        "text": "working",
+        "clean_text": "working",
+        "start_time": 2.729,
+        "end_time": 4.239
+      },
+      {
+        "text": "Today is raining.",
+        "clean_text": "Today is raining",
+        "start_time": 9.737,
+        "end_time": 11.645
+      },
+      {
+        "text": "It might stop.",
+        "clean_text": "It might stop",
+        "start_time": 16.482,
+        "end_time": 18.254
+      },
+      {
+        "text": "and go for a walk.",
+        "clean_text": "and go for a walk",
+        "start_time": 22.475,
+        "end_time": 24.472
+      }
+    ],
+    "translations": [
+      {
+        "english": "working",
+        "english_clean": "working",
+        "portuguese": "trabalhando",
+        "start_time": 2.729,
+        "end_time": 4.239
+      },
+      {
+        "english": "Today is raining.",
+        "english_clean": "Today is raining",
+        "portuguese": "Hoje est\u00e1 chovendo",
+        "start_time": 9.737,
+        "end_time": 11.645
+      },
+      {
+        "english": "It might stop.",
+        "english_clean": "It might stop",
+        "portuguese": "Pode parar",
+        "start_time": 16.482,
+        "end_time": 18.254
+      },
+      {
+        "english": "and go for a walk.",
+        "english_clean": "and go for a walk",
+        "portuguese": "e v\u00e1 dar um passeio",
+        "start_time": 22.475,
+        "end_time": 24.472
+      }
+    ],
+    "duration": 24.477,
+    "spans_count": 8,
+    "segments_count": 8,
+    "original_sentences": [
+      "Eu quero saber se est\u00e1",
+      "working corretamente como eu queria Today is raining",
+      "Mas acho que pela tarde",
+      "It might stop",
+      "E logo eu vou ser capaz de sair",
+      "and go for a walk"
+    ],
+    "sentence_translations": [
+      {
+        "english": "Eu quero saber se est\u00e1",
+        "portuguese": "A \u00fanica coisa que deve mudar da entrada para a sa\u00edda \u00e9 a tradu\u00e7\u00e3o das palavras inglesas para portugu\u00eas."
+      }
+    ],
+    "total_time": 28.679612159729004,
+    "parsing_time": 0.0521390438079834,
+    "file_setup_time": 0.0007700920104980469,
+    "audio_loading_time": 1.9425840377807617,
+    "segmentation_time": 2.193450927734375e-05,
+    "transcription_time": 18.82536220550537,
+    "translation_time": 5.233672857284546,
+    "grammar_correction_time": 2.624852180480957,
+    "segment_timings": [
+      2.6810081005096436,
+      1.2673211097717285,
+      3.2692949771881104,
+      3.9049389362335205,
+      1.617901086807251,
+      2.0787508487701416,
+      2.529350996017456,
+      1.4723210334777832
+    ]
+  },
+  {
+    "timestamp": "2025-08-27T11:18:34.829569",
+    "transcript": "\"Ok, eu acho que faz sentido ter um exemplo perfeito que eu posso usar para demonstrar o que eu quero. Ent\u00e3o, eu vou falar de a few different things pra ver o resultado que eu quero, sabe? Ent\u00e3o, hoje eu t\u00f4 pensando em sair, tipo, \u00e0s duas da tarde para comer num restaurante, porque acho que aqui no Brasil \u00e9 mais comum comer o almo\u00e7o mais grande. And then later, eu vou comer algo mais pequeno para dinner. Ontem eu fui, I went to a shop para comprar, bem, n\u00e3o para comprar, mas para investigar e procurar uma viol\u00e3o, mas eu play left-handed guitar. E tamb\u00e9m eu tava procurando uma viol\u00e3o mais pequeno, a travel guitar. Porque eu t\u00f4 aqui viajando no Brasil e n\u00e3o quero ficar com um viol\u00e3o muito grande porque j\u00e1 eu tenho two backpacks com que eu t\u00f4 viajando, sabe? Mas quando eu cheguei l\u00e1 na loja e falava com o the guy that was working there, a gente junto n\u00e3o podia encontrar um viol\u00e3o que eu gostei, que foi do tamanho correto e they didn't have any viol\u00e3o like left-handed guitars. Ent\u00e3o eu decidi que eu vou procurar um, um vil\u00e3o, a second-hand guitar. Facebook marketplace, algo tipo assim, eu vou procurar um que seja mais pequ",
+    "raw_transcript": "Ok, eu acho que faz sentido ter um exemplo perfeito que eu posso usar para demonstrar o que eu quero. Ent\u00e3o, eu vou falar de... a few different things pra ver o resulto que eu quero, sabe? Ent\u00e3o, hoje eu t\u00f4 pensando em sair, tipo, \u00e0s duas da tarde para comer num restaurante, porque acho que aqui no Brasil \u00e9 mais comum comer o almo\u00e7o mais grande. and then later Eu vou comer algo mais pequeno para... Dinner. Ontem eu fui... I went to a shop para comprar... bem, n\u00e3o para comprar, mas para investigar e procurar uma viol\u00e3o mas eu... play left-handed guitar E tamb\u00e9m eu tava procurando uma viol\u00e3o mais pequeno. a travel guitar. Porque eu t\u00f4 aqui viajando no Brasil e n\u00e3o quero ficar com um viol\u00e3o muito grande porque j\u00e1 eu tenho... two backpacks com que eu t\u00f4 viajando, sabe? Mas quando eu cheguei l\u00e1 na loja e falava com o... the guy that was working there. A gente junto n\u00e3o podia encontrar um viol\u00e3o que eu gostei, que foi do tamanho correto e... They didn't have any Viol\u00e3o.. like left-handed guitars. Ent\u00e3o eu decidi que eu vou procurar um... um vil\u00e3o... a second-hand guitar. facebook marketplace algo tipo assim eu vou procurar um que seja mais pequenina pequeno e logo eu vou change the strings to be left-handed myself",
+    "corrected_transcript": "\"Ok, eu acho que faz sentido ter um exemplo perfeito que eu posso usar para demonstrar o que eu quero. Ent\u00e3o, eu vou falar de a few different things pra ver o resultado que eu quero, sabe? Ent\u00e3o, hoje eu t\u00f4 pensando em sair, tipo, \u00e0s duas da tarde para comer num restaurante, porque acho que aqui no Brasil \u00e9 mais comum comer o almo\u00e7o mais grande. And then later, eu vou comer algo mais pequeno para dinner. Ontem eu fui, I went to a shop para comprar, bem, n\u00e3o para comprar, mas para investigar e procurar uma viol\u00e3o, mas eu play left-handed guitar. E tamb\u00e9m eu tava procurando uma viol\u00e3o mais pequeno, a travel guitar. Porque eu t\u00f4 aqui viajando no Brasil e n\u00e3o quero ficar com um viol\u00e3o muito grande porque j\u00e1 eu tenho two backpacks com que eu t\u00f4 viajando, sabe? Mas quando eu cheguei l\u00e1 na loja e falava com o the guy that was working there, a gente junto n\u00e3o podia encontrar um viol\u00e3o que eu gostei, que foi do tamanho correto e they didn't have any viol\u00e3o like left-handed guitars. Ent\u00e3o eu decidi que eu vou procurar um, um vil\u00e3o, a second-hand guitar. Facebook marketplace, algo tipo assim, eu vou procurar um que seja mais pequ",
+    "full_transcript": "Ok, eu acho que faz sentido ter um exemplo perfeito que eu posso usar para demonstrar o que eu quero. Ent\u00e3o, eu vou falar de... a few different things pra ver o resulto que eu quero, sabe? Ent\u00e3o, hoje eu t\u00f4 pensando em sair, tipo, \u00e0s duas da tarde para comer num restaurante, porque acho que aqui no Brasil \u00e9 mais comum comer o almo\u00e7o mais grande. and then later Eu vou comer algo mais pequeno para... Dinner. Ontem eu fui... I went to a shop para comprar... bem, n\u00e3o para comprar, mas para investigar e procurar uma viol\u00e3o mas eu... play left-handed guitar E tamb\u00e9m eu tava procurando uma viol\u00e3o mais pequeno. a travel guitar. Porque eu t\u00f4 aqui viajando no Brasil e n\u00e3o quero ficar com um viol\u00e3o muito grande porque j\u00e1 eu tenho... two backpacks com que eu t\u00f4 viajando, sabe? Mas quando eu cheguei l\u00e1 na loja e falava com o... the guy that was working there. A gente junto n\u00e3o podia encontrar um viol\u00e3o que eu gostei, que foi do tamanho correto e... They didn't have any Viol\u00e3o.. like left-handed guitars. Ent\u00e3o eu decidi que eu vou procurar um... um vil\u00e3o... a second-hand guitar. facebook marketplace algo tipo assim eu vou procurar um que seja mais pequenina pequeno e logo eu vou change the strings to be left-handed myself",
+    "english_segments": [
+      {
+        "text": "a few different things",
+        "clean_text": "a few different things",
+        "start_time": 19.313,
+        "end_time": 21.426
+      },
+      {
+        "text": "and then later",
+        "clean_text": "and then later",
+        "start_time": 50.394,
+        "end_time": 51.773
+      },
+      {
+        "text": "Dinner.",
+        "clean_text": "Dinner",
+        "start_time": 56.237,
+        "end_time": 57.655
+      },
+      {
+        "text": "I went to a shop",
+        "clean_text": "I went to a shop",
+        "start_time": 65.376,
+        "end_time": 68.858
+      },
+      {
+        "text": "play left-handed guitar",
+        "clean_text": "play left-handed guitar",
+        "start_time": 84.661,
+        "end_time": 87.015
+      },
+      {
+        "text": "a travel guitar.",
+        "clean_text": "a travel guitar",
+        "start_time": 97.446,
+        "end_time": 99.687
+      },
+      {
+        "text": "two backpacks",
+        "clean_text": "two backpacks",
+        "start_time": 109.012,
+        "end_time": 110.755
+      },
+      {
+        "text": "the guy that was working there.",
+        "clean_text": "the guy that was working there",
+        "start_time": 126.707,
+        "end_time": 128.497
+      },
+      {
+        "text": "They didn't have any",
+        "clean_text": "They didn't have any",
+        "start_time": 138.768,
+        "end_time": 140.347
+      },
+      {
+        "text": "like left-handed guitars.",
+        "clean_text": "like left-handed guitars",
+        "start_time": 144.179,
+        "end_time": 145.78
+      },
+      {
+        "text": "a second-hand guitar.",
+        "clean_text": "a second-hand guitar",
+        "start_time": 153.781,
+        "end_time": 157.091
+      },
+      {
+        "text": "change the strings to be left-handed myself",
+        "clean_text": "change the strings to be left-handed myself",
+        "start_time": 169.216,
+        "end_time": 173.675
+      }
+    ],
+    "translations": [
+      {
+        "english": "a few different things",
+        "english_clean": "a few different things",
+        "portuguese": "algumas coisas diferentes",
+        "start_time": 19.313,
+        "end_time": 21.426
+      },
+      {
+        "english": "and then later",
+        "english_clean": "and then later",
+        "portuguese": "e depois mais tarde",
+        "start_time": 50.394,
+        "end_time": 51.773
+      },
+      {
+        "english": "Dinner.",
+        "english_clean": "Dinner",
+        "portuguese": "Jantar",
+        "start_time": 56.237,
+        "end_time": 57.655
+      },
+      {
+        "english": "I went to a shop",
+        "english_clean": "I went to a shop",
+        "portuguese": "Fui a uma loja",
+        "start_time": 65.376,
+        "end_time": 68.858
+      },
+      {
+        "english": "play left-handed guitar",
+        "english_clean": "play left-handed guitar",
+        "portuguese": "tocar guitarra com a m\u00e3o esquerda",
+        "start_time": 84.661,
+        "end_time": 87.015
+      },
+      {
+        "english": "a travel guitar.",
+        "english_clean": "a travel guitar",
+        "portuguese": "uma guitarra de viagem",
+        "start_time": 97.446,
+        "end_time": 99.687
+      },
+      {
+        "english": "two backpacks",
+        "english_clean": "two backpacks",
+        "portuguese": "duas mochilas",
+        "start_time": 109.012,
+        "end_time": 110.755
+      },
+      {
+        "english": "the guy that was working there.",
+        "english_clean": "the guy that was working there",
+        "portuguese": "o cara que estava trabalhando l\u00e1",
+        "start_time": 126.707,
+        "end_time": 128.497
+      },
+      {
+        "english": "They didn't have any",
+        "english_clean": "They didn't have any",
+        "portuguese": "Eles n\u00e3o tinham nenhum",
+        "start_time": 138.768,
+        "end_time": 140.347
+      },
+      {
+        "english": "like left-handed guitars.",
+        "english_clean": "like left-handed guitars",
+        "portuguese": "como guitarras para canhotos",
+        "start_time": 144.179,
+        "end_time": 145.78
+      },
+      {
+        "english": "a second-hand guitar.",
+        "english_clean": "a second-hand guitar",
+        "portuguese": "uma guitarra de segunda m\u00e3o",
+        "start_time": 153.781,
+        "end_time": 157.091
+      },
+      {
+        "english": "change the strings to be left-handed myself",
+        "english_clean": "change the strings to be left-handed myself",
+        "portuguese": "mudar as cordas para ser canhoto eu mesmo",
+        "start_time": 169.216,
+        "end_time": 173.675
+      }
+    ],
+    "duration": 173.68,
+    "spans_count": 24,
+    "segments_count": 24,
+    "original_sentences": [
+      "Ok, eu acho que faz sentido ter um exemplo perfeito que eu posso usar para demonstrar o que eu quero",
+      "Ent\u00e3o, eu vou falar de",
+      "a few different things pra ver o resulto que eu quero, sabe",
+      "Ent\u00e3o, hoje eu t\u00f4 pensando em sair, tipo, \u00e0s duas da tarde para comer num restaurante, porque acho que aqui no Brasil \u00e9 mais comum comer o almo\u00e7o mais grande",
+      "and then later Eu vou comer algo mais pequeno para",
+      "Dinner",
+      "Ontem eu fui",
+      "I went to a shop para comprar",
+      "bem, n\u00e3o para comprar, mas para investigar e procurar uma viol\u00e3o mas eu",
+      "play left-handed guitar E tamb\u00e9m eu tava procurando uma viol\u00e3o mais pequeno",
+      "a travel guitar",
+      "Porque eu t\u00f4 aqui viajando no Brasil e n\u00e3o quero ficar com um viol\u00e3o muito grande porque j\u00e1 eu tenho",
+      "two backpacks com que eu t\u00f4 viajando, sabe",
+      "Mas quando eu cheguei l\u00e1 na loja e falava com o",
+      "the guy that was working there",
+      "A gente junto n\u00e3o podia encontrar um viol\u00e3o que eu gostei, que foi do tamanho correto e",
+      "They didn't have any Viol\u00e3o",
+      "like left-handed guitars",
+      "Ent\u00e3o eu decidi que eu vou procurar um",
+      "um vil\u00e3o",
+      "a second-hand guitar",
+      "facebook marketplace algo tipo assim eu vou procurar um que seja mais pequenina pequeno e logo eu vou change the strings to be left-handed myself"
+    ],
+    "sentence_translations": [
+      {
+        "english": "Ok, eu acho que faz sentido ter um exemplo perfeito que eu posso usar para demonstrar o que eu quero",
+        "portuguese": "A \u00fanica coisa que deve mudar da entrada para a sa\u00edda \u00e9 a tradu\u00e7\u00e3o das palavras inglesas para portugu\u00eas."
+      }
+    ],
+    "total_time": 94.01701712608337,
+    "parsing_time": 0.030916690826416016,
+    "file_setup_time": 0.0008251667022705078,
+    "audio_loading_time": 0.5152792930603027,
+    "segmentation_time": 4.291534423828125e-05,
+    "transcription_time": 71.24303793907166,
+    "translation_time": 12.29342269897461,
+    "grammar_correction_time": 9.933213233947754,
+    "segment_timings": [
+      6.171162128448486,
+      1.9097158908843994,
+      6.3873536586761475,
+      2.3576691150665283,
+      2.00345778465271,
+      2.2598679065704346,
+      3.8682029247283936,
+      2.3173840045928955,
+      5.919667959213257,
+      1.5500941276550293,
+      2.9483840465545654,
+      1.8547520637512207,
+      3.556291103363037,
+      1.3306660652160645,
+      4.9308671951293945,
+      1.628514051437378,
+      2.85634183883667,
+      1.0331640243530273,
+      3.65903902053833,
+      1.4493939876556396,
+      2.2014260292053223,
+      2.229975700378418,
+      3.866035223007202,
+      2.9435510635375977
+    ]
   }
 ]
